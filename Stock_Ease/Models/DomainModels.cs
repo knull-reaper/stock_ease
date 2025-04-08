@@ -22,8 +22,9 @@ namespace Stock_Ease.Models
         public int ProductId { get; set; }
         public string Name { get; set; } = null!;
         public string? Barcode { get; set; }
-        public int Quantity { get; set; }
-        public int MinimumThreshold { get; set; } = 0;
+        public int Quantity { get; set; } // Keep quantity for discrete items if needed, or potentially phase out
+        public double CurrentWeight { get; set; } // Added for weight tracking
+        public int MinimumThreshold { get; set; } = 0; // Assuming this now represents minimum weight threshold
         public DateTime? ExpiryDate { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
         public virtual ICollection<Alert> Alerts { get; set; } = new List<Alert>();

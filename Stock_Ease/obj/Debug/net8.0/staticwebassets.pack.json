@@ -2,7 +2,7 @@
   "Files": [
     {
       "Id": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Stock_Ease.bundle.scp.css",
-      "PackagePath": "staticwebassets\\Stock_Ease.hhlppvoo35.bundle.scp.css"
+      "PackagePath": "staticwebassets\\Stock_Ease.bundle.scp.css"
     },
     {
       "Id": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\wwwroot\\assets\\alerts.svg",
@@ -267,10 +267,6 @@
     {
       "Id": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
-    },
-    {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Stock_Ease.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
-      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Stock_Ease.Microsoft.AspNetCore.StaticWebAssets.props",

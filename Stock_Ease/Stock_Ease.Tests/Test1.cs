@@ -1,4 +1,6 @@
-﻿namespace Stock_Ease.Tests;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Stock_Ease.Tests;
 
 [TestClass]
 public sealed class Test1

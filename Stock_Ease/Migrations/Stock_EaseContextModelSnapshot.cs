@@ -61,6 +61,9 @@ namespace Stock_Ease.Migrations
                     b.Property<string>("Barcode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("CurrentWeight")
+                        .HasColumnType("float");
+
                     b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
 

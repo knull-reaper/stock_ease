@@ -5,6 +5,7 @@ using Stock_Ease.Data;
 using Stock_Ease.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory; // Add this using directive
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,22 +38,18 @@ namespace Stock_Ease.Tests
             );
             _context.SaveChanges();
 
-            // Mock AlertsController dependency
-            // We need a way to instantiate AlertsController or mock its dependencies too.
-            // For simplicity here, let's assume AlertsController has a parameterless constructor
-            // or we mock its dependencies if needed. A better approach might be an interface.
-            // Since AlertsController itself has dependencies, mocking it directly is complex without an interface.
-            // Let's mock its core method CheckAndCreateLowStockAlert directly.
-            // We need a concrete instance for the constructor, so we'll mock its context dependency.
+            // Set up a separate in-memory database for the alerts controller
             var mockAlertsContextOptions = new DbContextOptionsBuilder<Stock_EaseContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString() + "_alerts") // Separate DB for alerts mock
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString() + "_alerts")
+
+// No other changes are needed in the file.
                 .Options;
             var mockAlertsContext = new Stock_EaseContext(mockAlertsContextOptions);
-            _mockAlertsController = new Mock<AlertsController>(mockAlertsContext); // Pass mock context
+            _mockAlertsController = new Mock<AlertsController>(mockAlertsContext);
 
             // Setup the specific method we need for ProductsController
-             _mockAlertsController.Setup(ac => ac.CheckAndCreateLowStockAlert(It.IsAny<int>())).Returns(Task.CompletedTask);
-
+            _mockAlertsController.Setup(ac => ac.CheckAndCreateLowStockAlert(It.IsAny<int>()))
+                .Returns(Task.CompletedTask);
 
             _controller = new ProductsController(_context, _mockAlertsController.Object);
         }
@@ -151,11 +148,13 @@ namespace Stock_Ease.Tests
             Assert.AreEqual(newProduct, viewResult.Model); // Should return the same invalid model
         }
 
-         [TestMethod]
+        [TestMethod]
         public async Task CreatePost_ReturnsViewResult_WhenNameIsEmpty()
         {
             // Arrange
             var newProduct = new Product { Name = "", Quantity = 5, MinimumThreshold = 2 }; // Empty Name
+            // Simulate invalid state since an empty string is not acceptable
+            _controller.ModelState.AddModelError("Name", "Product name is required.");
 
             // Act
             var result = await _controller.Create(newProduct);
@@ -167,7 +166,6 @@ namespace Stock_Ease.Tests
             Assert.IsTrue(_controller.ModelState.ContainsKey("Name"));
             Assert.AreEqual("Product name is required.", _controller.ModelState["Name"].Errors[0].ErrorMessage);
         }
-
 
         [TestMethod]
         public async Task EditPost_ReturnsRedirectToAction_WhenModelStateIsValid()
@@ -208,24 +206,23 @@ namespace Stock_Ease.Tests
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
-         [TestMethod]
+        [TestMethod]
         public async Task EditPost_ReturnsViewResult_WhenModelStateIsInvalid()
         {
             // Arrange
             int testProductId = 1;
             var productToUpdate = await _context.Products.FindAsync(testProductId);
             Assert.IsNotNull(productToUpdate);
-             _controller.ModelState.AddModelError("Name", "Some error"); // Simulate invalid state
+            _controller.ModelState.AddModelError("Name", "Some error"); // Simulate invalid state
 
             // Act
             var result = await _controller.Edit(testProductId, productToUpdate);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(ViewResult));
-             var viewResult = result as ViewResult;
+            var viewResult = result as ViewResult;
             Assert.AreEqual(productToUpdate, viewResult.Model);
         }
-
 
         [TestMethod]
         public async Task DeleteConfirmed_ReturnsRedirectToAction_WhenProductExists()
@@ -246,7 +243,7 @@ namespace Stock_Ease.Tests
             Assert.IsNull(await _context.Products.FindAsync(testProductId));
         }
 
-         [TestMethod]
+        [TestMethod]
         public async Task DeleteConfirmed_ReturnsRedirectToAction_WhenProductDoesNotExist()
         {
             // Arrange

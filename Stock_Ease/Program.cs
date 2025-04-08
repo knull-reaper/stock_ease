@@ -18,6 +18,7 @@ namespace Stock_Ease
 
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient(); // Register IHttpClientFactory
 
 
             builder.Services.AddDbContext<Stock_EaseContext>(options =>
