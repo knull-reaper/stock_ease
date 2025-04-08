@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Stock_Ease.Data;
 using Stock_Ease.Hubs;
 using Stock_Ease.Controllers;
+using Stock_Ease.Services; // Add this using
 
 namespace Stock_Ease
 {
@@ -29,6 +30,7 @@ namespace Stock_Ease
 
 
             builder.Services.AddScoped<AlertsController>();
+            builder.Services.AddSingleton<IWeightSensorStatusService, WeightSensorStatusService>(); // Register the service
 
             var app = builder.Build();
 

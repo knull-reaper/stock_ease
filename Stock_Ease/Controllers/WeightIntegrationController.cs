@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Stock_Ease.Data;
 using Stock_Ease.Models;
+using Stock_Ease.Services; // Add this
 using System;
 using System.Net.Http;
 using System.Text;
@@ -24,18 +25,25 @@ namespace Stock_Ease.Controllers
     {
         private readonly Stock_EaseContext _context;
         private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory; // For sending Discord notification
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IWeightSensorStatusService _sensorStatusService; // Inject the service
 
         // TODO: Create a dedicated Discord notification service later
         // private readonly IDiscordNotificationService _discordNotifier;
 
-        public WeightIntegrationController(Stock_EaseContext context, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public WeightIntegrationController(
+            Stock_EaseContext context,
+            IConfiguration configuration,
+            IHttpClientFactory httpClientFactory,
+            IWeightSensorStatusService sensorStatusService) // Add service to constructor
         {
             _context = context;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+            _sensorStatusService = sensorStatusService; // Assign injected service
         }
 
+        // --- Endpoint for Python script to update weight ---
         [HttpPost("updateweight")]
         public async Task<IActionResult> UpdateWeight([FromBody] WeightUpdateRequest request, [FromHeader(Name = "X-API-Key")] string apiKey)
         {
@@ -82,6 +90,33 @@ namespace Stock_Ease.Controllers
                 return StatusCode(500, "An internal server error occurred.");
             }
         }
+
+        // --- Endpoint for Python script to send heartbeat ---
+        [HttpPost("heartbeat/{sensorId}")]
+        public IActionResult Heartbeat(string sensorId)
+        {
+            if (string.IsNullOrWhiteSpace(sensorId))
+            {
+                return BadRequest("Sensor ID cannot be empty.");
+            }
+
+            // Record the heartbeat using the injected service
+            _sensorStatusService.RecordHeartbeat(sensorId);
+            // Console.WriteLine($"Heartbeat received from sensor: {sensorId}"); // Optional logging
+            return Ok($"Heartbeat recorded for sensor {sensorId}.");
+        }
+
+        // --- Endpoint for Frontend to get active sensors ---
+        [HttpGet("sensors")]
+        public IActionResult GetActiveSensors()
+        {
+            // Define a reasonable timeout (e.g., 5 minutes)
+            // Consider making this configurable later
+            var timeout = TimeSpan.FromMinutes(5);
+            var activeSensors = _sensorStatusService.GetActiveSensors(timeout);
+            return Ok(activeSensors); // Return the list of active sensors
+        }
+
 
         // --- Temporary Discord Alert Method (Refactor later) ---
         private async Task SendDiscordAlert(Product product)
