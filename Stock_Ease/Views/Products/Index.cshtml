@@ -1,0 +1,57 @@
+﻿@model global::System.Collections.Generic.IEnumerable<Stock_Ease.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    
+    int lowStockThreshold = ViewData["LowStockThreshold"] as int? ?? 10;
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card"> 
+        <div class="card-header">
+            Product List
+            <a asp-action="Create" class="btn btn-primary btn-sm float-end">
+            <i class="fas fa-plus"></i> Create New Product
+        </a>
+    </div>
+    <div class="card-body"> 
+        
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-2">Name</div>
+            <div class="col col-1">Quantity</div> 
+            <div class="col col-1">Threshold</div>
+            <div class="col col-3">Expiry Date</div>
+            <div class="col col-5">Actions</div> 
+        </li>
+        @foreach (var item in Model)
+        {
+            <li class="table-row">
+                <div class="col col-2" data-label="Name">@item.Name</div>
+                <div class="col col-1 @(item.Quantity <= lowStockThreshold ? "low-stock-warning" : "")" data-label="Quantity" data-product-id="@item.ProductId">
+                    @item.Quantity
+                </div>
+                <div class="col col-1" data-label="Threshold">@item.MinimumThreshold</div>
+                <div class="col col-3" data-label="Expiry Date">@item.ExpiryDate?.ToString("yyyy-MM-dd")</div> 
+                <div class="col col-5" data-label="Actions">
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-secondary" title="Edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info" title="Details">
+                        <i class="fas fa-info-circle"></i> Details
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger" title="Delete">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </div>
+            </li> 
+        }
+        </ul>
+    </div> 
+</div>

@@ -1,0 +1,56 @@
+﻿@model Stock_Ease.Models.User
+
+@{
+    ViewData["Title"] = "Edit User"; 
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Update User Details
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6"> 
+                    <form asp-action="Edit" method="post"> 
+                        @Html.AntiForgeryToken() 
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div> 
+                        <input type="hidden" asp-for="UserId" />
+
+                        <div class="mb-3"> 
+                            <label asp-for="Name" class="form-label"></label> 
+                            <input asp-for="Name" class="form-control" /> 
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3"> 
+                            <label asp-for="Role" class="form-label"></label> 
+                            <input asp-for="Role" class="form-control" /> 
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3"> 
+                            <label asp-for="Email" class="form-label"></label> 
+                            <input asp-for="Email" class="form-control" /> 
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+
+                        <div class="mt-4"> 
+                            <input type="submit" value="Save Changes" class="btn btn-primary" /> 
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" /> 
+}

@@ -1,0 +1,42 @@
+﻿@model global::System.Collections.Generic.IEnumerable<Stock_Ease.Models.Report>
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h1 class="mb-0">@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="card"> 
+    <div class="card-header"> 
+        Report List
+        <a asp-action="Create" class="btn btn-primary btn-sm float-end">Create New Report</a> 
+    </div>
+    <div class="card-body"> 
+        
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-2">Report Type</div> 
+        <div class="col col-3">Generated Date</div>
+        <div class="col col-4">User</div>
+        <div class="col col-5">Actions</div> 
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="table-row">
+            <div class="col col-2" data-label="Report Type">@item.ReportType</div>
+            <div class="col col-3" data-label="Generated Date">@item.GeneratedDate.ToString("g")</div> 
+            <div class="col col-4" data-label="User">@item.User.Name</div> 
+            <div class="col col-5" data-label="Actions"> 
+                <a asp-action="Edit" asp-route-id="@item.ReportId" class="btn btn-sm btn-secondary">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.ReportId" class="btn btn-sm btn-info">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.ReportId" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+            </li>
+        }
+        </ul>
+    </div> 
+</div>

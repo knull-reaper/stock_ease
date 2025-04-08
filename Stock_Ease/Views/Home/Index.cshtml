@@ -1,0 +1,76 @@
+﻿﻿@{
+    ViewData["Title"] = "Dashboard"; 
+}
+
+
+<div class="container-fluid">
+
+    
+
+
+    
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center d-flex flex-column"> 
+                    <i class="fas fa-box fa-3x mb-3 text-primary"></i>
+                    <h5 class="card-title">Manage Products</h5>
+                    <p class="card-text">View, add, edit, or delete products in your inventory.</p>
+                    <div class="mt-auto"> 
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Go to Products</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center d-flex flex-column"> 
+                    <i class="fas fa-exchange-alt fa-3x mb-3 text-success"></i> 
+                    <h5 class="card-title">Record Transactions</h5>
+                    <p class="card-text">Log incoming and outgoing stock movements.</p>
+                    <div class="mt-auto"> 
+                        <a asp-controller="Transactions" asp-action="Create" class="btn btn-success">New Transaction</a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center d-flex flex-column"> 
+                    <i class="fas fa-bell fa-3x mb-3 text-warning"></i> 
+                    <h5 class="card-title">View Alerts</h5>
+                    <p class="card-text">Check for low stock warnings and other notifications.</p>
+                    <div class="mt-auto"> 
+                        <a asp-controller="Alerts" asp-action="Index" class="btn btn-warning">View Alerts</a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            Product Lookup / Registration
+        </div>
+        <div class="card-body">
+            <form asp-controller="Home" asp-action="LookupProductByBarcode" method="post" class="row g-3 align-items-end"> 
+                <div class="col-auto">
+                    <label for="barcodeInput" class="form-label">Enter Barcode:</label>
+                    
+                    <div class="d-flex align-items-center">
+                        <input type="text" name="barcode" id="barcodeInput" class="form-control me-2" placeholder="Scan or type barcode..." required style="flex-grow: 1;" /> 
+                        <button type="submit" class="btn btn-primary flex-shrink-0"><i class="fas fa-search"></i> Lookup</button> 
+                    </div>
+                </div>
+                <div class="col-auto ms-auto"> 
+                     <a asp-controller="Products" asp-action="Create" class="btn btn-secondary"><i class="fas fa-plus"></i> Manual Registration</a>
+                </div>
+            </form>
+            <div class="form-text mt-2">
+                Enter a product barcode to view its details. If the barcode is not found, you will be prompted to register it.
+            </div>
+        </div>
+    </div>
+
+</div>

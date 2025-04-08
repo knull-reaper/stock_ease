@@ -1,0 +1,49 @@
+﻿@model global::System.Collections.Generic.IEnumerable<Stock_Ease.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card"> 
+        <div class="card-header">
+            Transaction List
+            <a asp-action="Create" class="btn btn-primary btn-sm float-end">
+            <i class="fas fa-plus"></i> New Transaction
+        </a>
+    </div>
+    <div class="card-body"> 
+        
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-2">Product</div>
+            <div class="col col-1">Quantity</div> 
+            <div class="col col-3">Date</div>
+            <div class="col col-4">User</div>
+            <div class="col col-5">Actions</div> 
+        </li>
+        
+        @foreach (var item in Model)
+        {
+            
+            <li class="table-row" data-transaction-id="@item.TransactionId">
+                <div class="col col-2" data-label="Product">@item.Product?.Name</div> 
+                <div class="col col-1" data-label="Quantity">@item.Quantity</div>
+                <div class="col col-3" data-label="Date">@item.TransactionDate.ToString("g")</div> 
+                <div class="col col-4" data-label="User">@item.User?.Name</div> 
+                <div class="col col-5 d-flex gap-1 align-items-center" data-label="Actions"> 
+                    <a asp-action="Edit" asp-route-id="@item.TransactionId" class="btn btn-sm btn-secondary" title="Edit"><i class="fas fa-edit"></i> Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.TransactionId" class="btn btn-sm btn-info" title="Details"><i class="fas fa-info-circle"></i> Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.TransactionId" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i> Delete</a>
+                </div>
+            </li> 
+        }
+        </ul>
+    </div> 
+</div>

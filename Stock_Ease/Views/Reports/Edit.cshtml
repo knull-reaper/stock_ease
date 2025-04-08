@@ -1,0 +1,60 @@
+﻿@model Stock_Ease.Models.Report
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+@{
+    ViewData["Title"] = "Edit Report"; 
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Update Report Details
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6"> 
+                    <form asp-action="Edit" method="post"> 
+                        @Html.AntiForgeryToken() 
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div> 
+                        <input type="hidden" asp-for="ReportId" />
+
+                        <div class="mb-3"> 
+                            <label asp-for="UserId" class="form-label"></label> 
+                            <select asp-for="UserId" class="form-select" asp-items="@(ViewData["UserId"] as SelectList)"> 
+                                <option value="">-- Select User --</option> 
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label asp-for="ReportType" class="form-label"></label> 
+                            <input asp-for="ReportType" class="form-control" /> 
+                            <span asp-validation-for="ReportType" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label asp-for="GeneratedDate" class="form-label"></label> 
+                            <input asp-for="GeneratedDate" type="datetime-local" class="form-control" /> 
+                            <span asp-validation-for="GeneratedDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mt-4"> 
+                            <input type="submit" value="Save Changes" class="btn btn-primary" /> 
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" /> 
+}

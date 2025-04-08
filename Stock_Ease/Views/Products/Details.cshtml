@@ -1,0 +1,60 @@
+﻿@model Stock_Ease.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+    
+    int lowStockThreshold = ViewData["LowStockThreshold"] as int? ?? 10;
+}
+
+<div class="container-fluid">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="card">
+        <div class="card-header">
+            Details for: @Model.Name
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Barcode)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Barcode)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
+                
+                <dd class="col-sm-9 product-quantity @(Model.Quantity <= lowStockThreshold ? "low-stock-warning" : "")" data-product-id="@Model.ProductId">
+                    @Html.DisplayFor(model => model.Quantity)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.MinimumThreshold)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.MinimumThreshold)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.ExpiryDate)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.ExpiryDate)
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer d-flex justify-content-start align-items-center"> 
+            <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-primary">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+        </div>
+    </div>
+</div>

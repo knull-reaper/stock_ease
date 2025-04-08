@@ -1,0 +1,58 @@
+﻿@model Stock_Ease.Models.Alert
+
+@{
+    ViewData["Title"] = "Alert Details";
+}
+
+<div class="container-fluid">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="card">
+        <div class="card-header">
+            Details for Alert ID: @Model.AlertId
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Message)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Message)
+                </dd>
+
+                <dt class="col-sm-3">
+                    Product
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Product.Name) 
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.AlertDate)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.AlertDate)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.IsRead)
+                </dt>
+                <dd class="col-sm-9">
+                     @if (Model.IsRead)
+                    {
+                        <span class="badge bg-success">Read</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Unread</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            
+            
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

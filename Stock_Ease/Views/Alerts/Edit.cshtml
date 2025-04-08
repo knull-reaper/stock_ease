@@ -1,0 +1,65 @@
+﻿@model Stock_Ease.Models.Alert
+
+@{
+    ViewData["Title"] = "Edit Alert";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Update Alert Details
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="AlertId" />
+
+                        <div class="mb-3">
+                            <label asp-for="ProductId" class="form-label"></label>
+                            <select asp-for="ProductId" class="form-select" asp-items="ViewBag.ProductId">
+                                <option value="">-- Select Product --</option>
+                            </select>
+                            <span asp-validation-for="ProductId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Message" class="form-label"></label>
+                            <textarea asp-for="Message" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="AlertDate" class="form-label"></label>
+                            <input asp-for="AlertDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="AlertDate" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="IsRead" />
+                            <label class="form-check-label" asp-for="IsRead">
+                                @Html.DisplayNameFor(model => model.IsRead)
+                            </label>
+                        </div>
+
+                        <div class="mt-4">
+                            <input type="submit" value="Save Changes" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

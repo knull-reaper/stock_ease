@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Stock_Ease.props" />
+</Project>

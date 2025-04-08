@@ -1,0 +1,67 @@
+﻿@model Stock_Ease.Models.Transaction
+
+@{
+    ViewData["Title"] = "Edit Transaction";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Update Transaction Details
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    
+                    <form asp-action="Edit" id="editTransactionForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="TransactionId" />
+                        @Html.AntiForgeryToken() 
+
+                        <div class="mb-3">
+                            <label asp-for="ProductId" class="form-label"></label>
+                            <select asp-for="ProductId" class="form-select" asp-items="ViewBag.ProductId">
+                                <option value="">-- Select Product --</option>
+                            </select>
+                            <span asp-validation-for="ProductId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Quantity" class="form-label"></label>
+                            <input asp-for="Quantity" type="number" class="form-control" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="UserId" class="form-label"></label>
+                            <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId">
+                                <option value="">-- Select User --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="TransactionDate" class="form-label"></label>
+                            <input asp-for="TransactionDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="TransactionDate" class="text-danger"></span>
+                        </div>
+                        <div class="mt-4">
+                            <input type="submit" value="Save Changes" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+}

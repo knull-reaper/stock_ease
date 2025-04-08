@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Stock_Ease.Models.Alert>
+
+@{
+    ViewData["Title"] = "Alerts";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card"> 
+        <div class="card-header">
+            Alert List
+            
+            <a asp-action="Create" class="btn btn-primary btn-sm float-end">
+            <i class="fas fa-plus"></i> Create New (Manual)
+        </a>
+    </div>
+    <div class="card-body"> 
+        
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-2">Message</div> 
+            <div class="col col-3">Product</div>
+            <div class="col col-4">Date</div>
+            <div class="col col-1">Status</div>
+            <div class="col col-5">Actions</div> 
+        </li>
+        @foreach (var item in Model)
+        {
+            <li class="table-row @(item.IsRead ? "" : "table-warning")"> 
+                <div class="col col-2" data-label="Message">@item.Message</div>
+                <div class="col col-3" data-label="Product">@item.Product?.Name</div> 
+                <div class="col col-4" data-label="Date">@item.AlertDate.ToString("g")</div> 
+                <div class="col col-1" data-label="Status">
+                    @if (item.IsRead)
+                    {
+                        <span class="badge bg-success">Read</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Unread</span>
+                    }
+                </div>
+                <div class="col col-5" data-label="Actions">
+                    <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-sm btn-info" title="Details"><i class="fas fa-info-circle"></i> Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.AlertId" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i> Delete</a>
+                </div>
+            </li> 
+        }
+        </ul>
+    </div> 
+</div> 

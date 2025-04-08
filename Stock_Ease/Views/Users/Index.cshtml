@@ -1,0 +1,42 @@
+﻿@model global::System.Collections.Generic.IEnumerable<Stock_Ease.Models.User>
+
+@{
+    ViewData["Title"] = "Users"; 
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h1 class="mb-0">@ViewData["Title"]</h1> 
+    </div>
+</div>
+
+<div class="card"> 
+    <div class="card-header"> 
+        User List
+        <a asp-action="Create" class="btn btn-primary btn-sm float-end">Create New User</a> 
+    </div>
+    <div class="card-body"> 
+        
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-2">Name</div>
+        <div class="col col-3">Role</div>
+        <div class="col col-4">Email</div>
+        <div class="col col-5">Actions</div> 
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="table-row">
+            <div class="col col-2" data-label="Name">@item.Name</div>
+            <div class="col col-3" data-label="Role">@item.Role</div>
+            <div class="col col-4" data-label="Email">@item.Email</div>
+            <div class="col col-5" data-label="Actions"> 
+                <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-sm btn-secondary">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-sm btn-info">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+            </li>
+        }
+        </ul>
+    </div> 
+</div>
