@@ -20,7 +20,22 @@ namespace Stock_Ease.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var stock_EaseContext = _context.Alerts.Include(a => a.Product);
+            // Only show unread alerts on the main index page
+            var stock_EaseContext = _context.Alerts
+                                            .Include(a => a.Product)
+                                            .Where(a => !a.IsRead) // Filter for unread alerts
+                                            .OrderByDescending(a => a.AlertDate); // Show newest first
+            return View(await stock_EaseContext.ToListAsync());
+        }
+
+        // Action to display read alerts (History)
+        public async Task<IActionResult> History()
+        {
+            var stock_EaseContext = _context.Alerts
+                                            .Include(a => a.Product)
+                                            .Where(a => a.IsRead) // Filter for read alerts
+                                            .OrderByDescending(a => a.AlertDate); // Show newest first
+            ViewData["Title"] = "Alert History"; // Set title for the view
             return View(await stock_EaseContext.ToListAsync());
         }
 
@@ -169,7 +184,7 @@ namespace Stock_Ease.Controllers
 
 
 
-        public async Task CheckAndCreateLowStockAlert(int productId)
+        public virtual async Task CheckAndCreateLowStockAlert(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
 
