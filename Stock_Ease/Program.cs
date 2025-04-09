@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Stock_Ease.Data;
 using Stock_Ease.Hubs;
 using Stock_Ease.Controllers;
-using Stock_Ease.Services; // Add this using
+using Stock_Ease.Services;
 
 namespace Stock_Ease
 {
@@ -17,9 +17,8 @@ namespace Stock_Ease
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient(); // Register IHttpClientFactory
+            builder.Services.AddHttpClient();
 
 
             builder.Services.AddDbContext<Stock_EaseContext>(options =>
@@ -28,9 +27,8 @@ namespace Stock_Ease
 
             builder.Services.AddSignalR();
 
-
             builder.Services.AddScoped<AlertsController>();
-            builder.Services.AddSingleton<IWeightSensorStatusService, WeightSensorStatusService>(); // Register the service
+            builder.Services.AddSingleton<IWeightSensorStatusService, WeightSensorStatusService>();
 
             var app = builder.Build();
 

@@ -24,34 +24,102 @@
         
         <ul class="responsive-table">
             <li class="table-header">
-                <div class="col col-2">Name</div>
-            <div class="col col-1">Quantity</div> 
-            <div class="col col-1">Threshold</div>
-            <div class="col col-3">Expiry Date</div>
-            <div class="col col-5">Actions</div> 
-        </li>
-        @foreach (var item in Model)
-        {
-            <li class="table-row">
-                <div class="col col-2" data-label="Name">@item.Name</div>
-                <div class="col col-1 @(item.Quantity <= lowStockThreshold ? "low-stock-warning" : "")" data-label="Quantity" data-product-id="@item.ProductId">
-                    @item.Quantity
-                </div>
-                <div class="col col-1" data-label="Threshold">@item.MinimumThreshold</div>
-                <div class="col col-3" data-label="Expiry Date">@item.ExpiryDate?.ToString("yyyy-MM-dd")</div> 
-                <div class="col col-5" data-label="Actions">
-                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-secondary" title="Edit">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info" title="Details">
-                        <i class="fas fa-info-circle"></i> Details
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger" title="Delete">
-                        <i class="fas fa-trash-alt"></i> Delete
-                    </a>
-                </div>
-            </li> 
-        }
+                <div class="col col-1">Name</div>
+                <div class="col col-1">Quantity</div>
+                <div class="col col-1">Weight</div>
+                <div class="col col-1">Threshold</div>
+                <div class="col col-2">Sensor ID</div>
+                <div class="col col-2">Expiry Date</div>
+                <div class="col col-4">Actions</div>
+            </li>
+            @foreach (var item in Model)
+            {
+                <li class="table-row">
+                    <div class="col col-1" data-label="Name">@item.Name</div>
+                    <div class="col col-1 @(item.Quantity <= lowStockThreshold ? "low-stock-warning" : "")" data-label="Quantity" data-product-id="@item.ProductId">
+                        @item.Quantity
+                    </div>
+                    <div class="col col-1" data-label="Weight" data-weight-product-id="@item.ProductId">
+                        <span class="weight-value">@item.CurrentWeight.ToString("F2")</span>
+                    </div>
+                    <div class="col col-1" data-label="Threshold">@item.MinimumThreshold</div>
+                    <div class="col col-2" data-label="Sensor ID">@(item.SensorId ?? "N/A")</div>
+                    <div class="col col-2" data-label="Expiry Date">@item.ExpiryDate?.ToString("yyyy-MM-dd")</div>
+                    <div class="col col-4" data-label="Actions">
+                        <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-secondary" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info" title="Details">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                </li>
+            }
         </ul>
-    </div> 
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/transactionHub")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.on("ReceiveWeightUpdate", function (productId, newWeight) {
+                console.log("SignalR: ReceiveWeightUpdate handler INVOKED!");
+                console.log(`SignalR: Received weight update for Product ${productId}: ${newWeight}`);
+
+                const weightSpan = document.querySelector(`.col[data-weight-product-id='${productId}'] span.weight-value`);
+
+                if (weightSpan) {
+                    weightSpan.textContent = parseFloat(newWeight).toFixed(2);
+
+                    weightSpan.classList.add('updated');
+                    setTimeout(() => {
+                        weightSpan.classList.remove('updated');
+                    }, 1500);
+                } else {
+                    console.warn(`SignalR: Could not find weight span for Product ID ${productId}`);
+                }
+            });
+
+            async function startSignalR() {
+                try {
+                    await connection.start();
+                    console.log("SignalR Connected.");
+                } catch (err) {
+                    console.error("SignalR Connection Error: ", err);
+                    setTimeout(startSignalR, 5000);
+                }
+            }
+
+            connection.onclose(async () => {
+                console.log("SignalR connection closed. Attempting to reconnect...");
+                await startSignalR();
+            });
+
+            startSignalR();
+        });
+    </script>
+
+    <style>
+        .weight-value {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.8s ease-out, color 0.8s ease-out;
+        }
+        .weight-value.updated {
+            background-color: #cce5ff;
+            color: #004085;
+            transition: background-color 0.2s ease-in, color 0.2s ease-in;
+        }
+    </style>
+}

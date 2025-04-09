@@ -22,10 +22,12 @@ namespace Stock_Ease.Models
         public int ProductId { get; set; }
         public string Name { get; set; } = null!;
         public string? Barcode { get; set; }
-        public int Quantity { get; set; } // Keep quantity for discrete items if needed, or potentially phase out
-        public double CurrentWeight { get; set; } // Added for weight tracking
-        public int MinimumThreshold { get; set; } = 0; // Assuming this now represents minimum weight threshold
+        public int Quantity { get; set; }
+        public double CurrentWeight { get; set; }
+        public int MinimumThreshold { get; set; } = 0;
+        public string ThresholdType { get; set; } = "Quantity"; // "Quantity" or "Weight"
         public DateTime? ExpiryDate { get; set; }
+        public string? SensorId { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
         public virtual ICollection<Alert> Alerts { get; set; } = new List<Alert>();
     }

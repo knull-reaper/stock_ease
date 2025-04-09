@@ -1,5 +1,6 @@
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\appsettings.json
+C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\libman.json
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Stock_Ease.staticwebassets.runtime.json
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Stock_Ease.exe
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Stock_Ease.deps.json
@@ -8,7 +9,6 @@ C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Stock_Ease.d
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Stock_Ease.pdb
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Azure.Identity.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Humanizer.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -59,8 +59,6 @@ C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.Vi
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Mono.TextTemplating.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Moq.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\NuGet.Common.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\NuGet.Configuration.dll
@@ -226,19 +224,6 @@ C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\ru\Microsoft
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\cs\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\de\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\es\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\fr\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\it\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\ja\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\ko\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\pl\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\pt-BR\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\ru\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\tr\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\zh-Hans\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
@@ -250,8 +235,6 @@ C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
-C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\obj\Debug\net8.0\Stock_Ease.csproj.AssemblyReference.cache
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\obj\Debug\net8.0\Stock_Ease.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\r34p3r\source\repos\Stock_Ease\Stock_Ease\obj\Debug\net8.0\Stock_Ease.AssemblyInfoInputs.cache

@@ -5,7 +5,11 @@
 }
 
 <div class="container-fluid">
-    <h1>@ViewData["Title"]</h1>
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-header">
@@ -50,9 +54,8 @@
             </dl>
         </div>
         <div class="card-footer">
-            
-            
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to Unread Alerts</a>
+            <a asp-action="History" class="btn btn-secondary ms-2">Back to History</a>
         </div>
     </div>
 </div>

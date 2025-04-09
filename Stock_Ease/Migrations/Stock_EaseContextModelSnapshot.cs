@@ -77,6 +77,13 @@ namespace Stock_Ease.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("SensorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThresholdType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");

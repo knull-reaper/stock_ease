@@ -1,7 +1,7 @@
-# PROG1322 Detailed Project Report: Stock_Ease Inventory Management System
+# PROG1322 **Ultra-Detailed** Project Report: Stock_Ease Inventory Management System
 
 **Group Members:** [Please Add Group Member Names Here]
-**Date:** April 8, 2025
+**Date:** April 9, 2025
 
 ---
 
@@ -12,23 +12,29 @@
     *   [1.2. Alignment with Learning Outcomes](#12-alignment-with-learning-outcomes-)
 2.  [💾 Database Design and Implementation Journey](#2--database-design-and-implementation-journey)
     *   [2.1. Choosing the Path: Code First with EF Core](#21-choosing-the-path-code-first-with-ef-core)
-    *   [2.2. Entity Relationship Model (ERM)](#22-entity-relationship-model-erm)
+    *   [2.2. Entity Relationship Model (ERM) - Detailed](#22-entity-relationship-model-erm---detailed)
     *   [2.3. Conceptual Schema Diagram](#23-conceptual-schema-diagram)
     *   [2.4. Data Integrity Mechanisms](#24-data-integrity-mechanisms)
 3.  [🏗️ Application Architecture](#3--application-architecture)
     *   [3.1. Technology Stack](#31-technology-stack)
     *   [3.2. Architectural Pattern: Model-View-Controller (MVC)](#32-architectural-pattern-model-view-controller-mvc)
-    *   [3.3. Dependency Injection (DI)](#33-dependency-injection-di)
-    *   [3.4. Request Lifecycle (Simplified)](#34-request-lifecycle-simplified)
+    *   [3.3. Dependency Injection (DI) Explained](#33-dependency-injection-di-explained)
+    *   [3.4. Request Lifecycle Example (Product Edit)](#34-request-lifecycle-example-product-edit)
+    *   [3.5. Service Layer Introduction (`WeightSensorStatusService`)](#35-service-layer-introduction-weightsensorstatusservice)
 4.  [⚙️ Building the Application: Functionality and Implementation Story](#4--building-the-application-functionality-and-implementation-story)
-    *   [4.1. Managing Products (`ProductsController`, `Views/Products/`)](#41-managing-products-productscontroller-viewsproducts)
-    *   [4.2. Recording Transactions (`TransactionsController`, `Views/Transactions/`)](#42-recording-transactions-transactionscontroller-viewstransactions)
-    *   [4.3. User, Alert, and Report Management](#43-user-alert-and-report-management)
-    *   [4.4. Data Access with LINQ & EF Core](#44-data-access-with-linq--ef-core)
+    *   [4.1. Core CRUD - Managing Products (`ProductsController`, `Views/Products/`)](#41-core-crud---managing-products-productscontroller-viewsproducts)
+    *   [4.2. Core CRUD - Recording Transactions (`TransactionsController`, `Views/Transactions/`)](#42-core-crud---recording-transactions-transactionscontroller-viewstransactions)
+    *   [4.3. Core CRUD - User, Alert, and Report Management](#43-core-crud---user-alert-and-report-management)
+    *   [4.4. Data Access Strategy: LINQ & EF Core](#44-data-access-strategy-linq--ef-core)
+    *   [4.5. Advanced Feature: Weight Sensor Integration](#45-advanced-feature-weight-sensor-integration)
+    *   [4.6. Advanced Feature: Real-time UI Updates with SignalR](#46-advanced-feature-real-time-ui-updates-with-signalr)
+    *   [4.7. Advanced Feature: Alerting Logic and History](#47-advanced-feature-alerting-logic-and-history)
+    *   [4.8. External Integration Simulation (OCR Script)](#48-external-integration-simulation-ocr-script)
 5.  [🧪 Testing Strategy and Implementation](#5--testing-strategy-and-implementation)
     *   [5.1. Database Testing (T-SQL)](#51-database-testing-t-sql)
     *   [5.2. Application Unit Testing (C# / MSTest)](#52-application-unit-testing-c--mstest)
-6.  [🤔 Design Choices and Considerations](#6--design-choices-and-considerations)
+    *   [5.3. Testing Gaps and Future Work](#53-testing-gaps-and-future-work)
+6.  [🤔 Design Choices, Challenges, and Considerations](#6--design-choices-challenges-and-considerations)
 7.  [🏁 Conclusion](#7--conclusion)
 8.  [👥 Peer Evaluation & Contribution Report](#8--peer-evaluation--contribution-report)
 
@@ -38,45 +44,47 @@
 
 **1.1. Project Background, Domain Choice, and Scope:**
 
-> This project, "Stock\_Ease," was undertaken to fulfill the requirements of the PROG1322 course assignment. The primary objective was to design, develop, test, and document a robust, data-driven web application, thereby demonstrating a practical understanding of the core software engineering principles and technologies covered in the course.
+> We undertook this project, "Stock\_Ease," to fulfill the requirements of the PROG1322 course assignment. Our primary objective was to design, develop, test, and document a robust, data-driven web application, thereby demonstrating our practical understanding of the core software engineering principles and technologies covered in the course. Our project evolved beyond basic CRUD to include integration with simulated external hardware (weight sensors) and real-time UI updates.
 
-The chosen domain for this project is **Inventory Management**. This domain was selected for several reasons:
+We chose the domain of **Inventory Management** for this project for several reasons:
 *   **Practical Relevance:** Inventory management is a fundamental challenge faced by businesses of all sizes, making the project relatable and demonstrating the application of learned skills to solve real-world problems.
-*   **Technical Requirements Alignment:** It naturally lends itself to implementing core database concepts (tables, relationships), full CRUD (Create, Read, Update, Delete) operations, data validation, and potentially more advanced features like reporting and real-time notifications.
-*   **Scalability Demonstration:** While implemented as a local application for this assignment, the underlying principles are applicable to larger, enterprise-level inventory systems.
+*   **Technical Requirements Alignment:** It naturally lends itself to implementing core database concepts (tables, relationships), full CRUD (Create, Read, Update, Delete) operations, data validation, and advanced features like reporting, real-time notifications, and external system integration.
+*   **Scalability Demonstration:** While we implemented it as a local application for this assignment, the underlying principles (MVC, EF Core, services, SignalR) are applicable to larger, enterprise-level inventory systems.
 
-**Stock\_Ease** is designed as a foundational inventory management system suitable for small businesses or individual use. Its core purpose is to provide a centralized platform to:
-*   **Track Products:** Maintain a catalog of products, including details like name, barcode, current quantity on hand, minimum desired stock level (threshold), and expiry dates where applicable.
-*   **Manage Stock Levels:** Record incoming stock (purchases, returns) and outgoing stock (sales, disposals) through transactions.
-*   **Monitor Inventory Health:** Automatically generate alerts when product quantities fall below predefined minimum thresholds.
-*   **User Accountability:** Associate transactions and reports with specific users (though full authentication/authorization is outside the current scope).
-*   **Basic Reporting:** Provide a mechanism to generate simple inventory reports (the current implementation is basic and could be expanded).
+We designed **Stock\_Ease** as a foundational inventory management system. Its core purpose is to provide a centralized platform to:
+*   **Track Products:** Maintain a catalog of products, including details like name, barcode, current quantity (manual tracking) or current weight (sensor tracking), minimum desired stock level (threshold based on quantity or weight), associated sensor ID, and expiry dates.
+*   **Manage Stock Levels:** Record incoming stock (purchases, returns) and outgoing stock (sales, disposals) through manual transactions. Automatically update stock levels based on simulated weight sensor readings.
+*   **Monitor Inventory Health:** Automatically generate alerts when product quantities/weights fall below predefined minimum thresholds, incorporating logic for restocking periods and potential product absence. Provide real-time visual feedback on stock levels.
+*   **User Accountability:** Associate manual transactions and reports with specific users.
+*   **Alert Management:** Display current (unread) alerts and provide a history of acknowledged (read) alerts.
+*   **Sensor Monitoring:** Display the status and last known weight reported by connected sensors.
 
-The application aims to replace manual tracking methods (like spreadsheets or paper logs), reducing errors, improving efficiency, and providing better visibility into inventory status.
+Our application aims to replace manual tracking methods, reducing errors, improving efficiency, and providing enhanced, real-time visibility into inventory status, including integration with physical monitoring devices.
 
 **1.2. Alignment with Learning Outcomes:** ✅
 
-> This project meticulously addresses the specified PROG1322 course learning outcomes:
+> Our project meticulously addresses the specified PROG1322 course learning outcomes:
 
 *   **LO1: Design and Create a Distributed Database Application:**
-    *   ✅ Designed and implemented a relational database schema using Microsoft SQL Server with appropriate tables, keys, and relationships.
-    *   ✅ Utilized Entity Framework Core (Code First) for programmatic schema definition and management.
-    *   *(See Section 2 for details)*
+    *   ✅ We designed and implemented a relational database schema using Microsoft SQL Server with appropriate tables, keys (PK/FK), data types, nullability constraints, and relationships to accurately model the inventory domain, including sensor-related data.
+    *   ✅ We utilized Entity Framework Core (Code First) for programmatic schema definition, evolution (via migrations), and management, enhancing maintainability.
+    *   *(See Section 2 for extensive details)*
 
 *   **LO2: Implement Automated Testing (TDD):**
-    *   ✅ Developed T-SQL scripts for database-level data integrity validation.
-    *   ✅ Implemented C# Unit Tests (MSTest) with mocking (Moq) and isolation (In-Memory DB) for application logic, demonstrating TDD concepts.
+    *   ✅ We developed T-SQL scripts for database-level data integrity validation, ensuring fundamental rules are enforced at the source.
+    *   ✅ We implemented C# Unit Tests (MSTest) with mocking (Moq) and isolation (In-Memory DB) for core application logic (specifically the initial `ProductsController`), demonstrating TDD concepts. *Note: Our testing coverage for newer features like sensor integration requires further expansion.*
     *   *(See Section 5 for details)*
 
 *   **LO3: Develop an Integrated Data-Driven Web Application:**
-    *   ✅ Built upon ASP.NET Core 8 MVC, integrating with SQL Server.
-    *   ✅ Leveraged EF Core 8 and LINQ extensively for data access.
-    *   ✅ Developed a functional CRUD web interface using Razor Views.
-    *   ✅ Adhered to a multi-layer design via the MVC pattern.
-    *   *(See Sections 3 & 4 for details)*
+    *   ✅ We built the application upon ASP.NET Core 8 MVC, integrating seamlessly with a Microsoft SQL Server database.
+    *   ✅ We leveraged EF Core 8 and LINQ extensively for type-safe and efficient data access and manipulation across controllers and services.
+    *   ✅ We developed a functional CRUD web interface using Razor Views for managing all core entities.
+    *   ✅ We implemented advanced features including an API endpoint for external data ingestion (`WeightIntegrationController`), real-time UI updates using SignalR (`TransactionHub`), and background service logic (`WeightSensorStatusService`).
+    *   ✅ We adhered to a multi-layer design via the MVC pattern, further enhanced by the introduction of a dedicated service layer for sensor status management.
+    *   *(See Sections 3 & 4 for extensive details)*
 
 *   **LO4: Present and Document Your Work:**
-    *   ✅ This comprehensive written report serves as the primary documentation deliverable.
+    *   ✅ This comprehensive written report serves as the primary documentation deliverable, detailing the project's design rationale, implementation steps, challenges, testing procedures, schema diagrams, code snippets, and alignment with course outcomes.
 
 ---
 
@@ -87,73 +95,69 @@ The application aims to replace manual tracking methods (like spreadsheets or pa
 > We decided to embark on the database design using the **Code First** approach with Entity Framework Core. This felt like the most natural fit for developing a new application within Visual Studio, allowing us to define our inventory world using C# classes first and then letting EF Core translate that into a database schema.
 
 *   **Why Code First?** 💡
-    *   It kept our focus on the application's domain model (`Product`, `User`, etc.) defined in C#.
-    *   Having the model classes version-controlled alongside our application code was a significant advantage.
-    *   EF Core Migrations promised a structured way to evolve the database as our understanding of the requirements grew.
+    *   **Domain Focus:** It allowed us to concentrate on defining the properties and relationships of our inventory entities (`Product`, `User`, `Transaction`, `Alert`, `Report`) directly in C# code within the `Models` folder.
+    *   **Maintainability:** Keeping the schema definition (C# classes) alongside the application code simplifies tracking changes and understanding the data structure.
+    *   **Version Control Integration:** The C# models are easily managed using Git or other version control systems.
+    *   **Structured Evolution:** EF Core Migrations provided a powerful and systematic way for us to update the database schema as we added new features like weight tracking and sensor IDs, generating the necessary SQL scripts automatically.
 
 *   **Our Workflow in Visual Studio:** ⚙️
-    1.  **Modeling the Domain:** We started by creating the initial POCO classes (like `Product`, `User`) in the `Models` folder, defining their properties within the Visual Studio editor.
-        `[SCREENSHOT HERE: Code snippet of Product.cs or User.cs model definition]`
-    2.  **Setting up the Context:** Next, we configured the `Stock_EaseContext` (`Data/stock_ease_context.cs`), adding `DbSet<T>` properties to tell EF Core which classes should become database tables.
-        `[SCREENSHOT HERE: Code snippet of Stock_EaseContext.cs showing DbSets]`
-    3.  **Generating the First Migration:** Using the **Package Manager Console** (PMC) in Visual Studio (found under Tools > NuGet Package Manager), we ran our first `Add-Migration InitialCreate`. This command analyzed our models and generated the C# code for the migration script, outlining the SQL needed to create the initial tables. *Challenge:* ⚠️ Sometimes, we had to manually adjust the generated migration if EF Core didn't infer constraints exactly as intended, or if we forgot a property initially.
-        `[SCREENSHOT HERE: Package Manager Console showing 'Add-Migration InitialCreate' command execution]`
-        `[SCREENSHOT HERE: Code snippet of the generated InitialCreate migration file]`
-    4.  **Creating the Database:** With the migration ready, we executed `Update-Database` in the PMC. This command ran the migration script against our local SQL Server instance, bringing our database schema to life. Visual Studio's integration made this relatively straightforward. *Challenge:* ⚠️ Ensuring the connection string in `appsettings.json` was correct and that the SQL Server instance was running was crucial here; incorrect settings led to runtime errors initially.
+    1.  **Modeling the Domain:** We started by creating the initial POCO (Plain Old CLR Object) classes (like `Product`, `User`) in the `Models` folder, defining their properties (e.g., `Name`, `Quantity`, `UserId`) using the Visual Studio editor.
+        `[SCREENSHOT HERE: Code snippet of Product.cs or User.cs initial model definition]`
+    2.  **Setting up the Context:** Next, we configured the `Stock_EaseContext` class (`Data/stock_ease_context.cs`), inheriting from `DbContext` and adding `DbSet<T>` properties for each entity we wanted EF Core to manage as a database table.
+        `[SCREENSHOT HERE: Code snippet of Stock_EaseContext.cs showing initial DbSets]`
+    3.  **Generating Migrations:** Using the **Package Manager Console** (PMC) in Visual Studio (Tools > NuGet Package Manager > PMC), we ran `Add-Migration MigrationName` (e.g., `Add-Migration InitialCreate`, `Add-Migration AddCurrentWeightToProduct`, `Add-Migration AddSensorIdToProduct`, `Add-Migration AddThresholdTypeToProduct`). This command analyzed changes between our C# models and the last applied migration (or the initial state) and generated a new migration file containing `Up()` and `Down()` methods with the C# code to apply (or revert) the schema changes using EF Core's migration API. *Challenge:* ⚠️ Sometimes, EF Core's conventions didn't perfectly match our intent (e.g., for relationships or constraints), requiring manual adjustments in the generated migration file or using Fluent API configurations within the `DbContext`'s `OnModelCreating` method (though we primarily relied on conventions and data annotations here). Forgetting to add a `DbSet` for a new model also prevented migrations from detecting it initially.
+        `[SCREENSHOT HERE: Package Manager Console showing an 'Add-Migration ...' command execution]`
+        `[SCREENSHOT HERE: Code snippet of a generated migration file (e.g., AddCurrentWeightToProduct.cs)]`
+    4.  **Applying Migrations (Updating Database):** With the migration ready, we executed `Update-Database` in the PMC. This command executed the `Up()` method(s) of pending migration(s), applying the corresponding SQL changes to our target SQL Server database defined in the connection string. Visual Studio's integration made this relatively straightforward. *Challenge:* ⚠️ Ensuring the connection string in `appsettings.json` pointed to the correct server and database, and that the SQL Server instance was accessible, was crucial. Incorrect settings often resulted in connection errors during `Update-Database` or application runtime. We also learned to be cautious when modifying already-applied migrations, preferring to add new ones instead.
         `[SCREENSHOT HERE: Package Manager Console showing 'Update-Database' command execution]`
 
-*   **Reflection:** 💭 While Code First worked well, we recognized the importance of carefully planning migrations, especially in a team setting, to avoid conflicts. For projects connecting to complex, pre-existing databases, Database First might have been a more suitable approach.
+*   **Reflection:** 💭 Code First proved effective for this project, allowing us rapid iteration as requirements evolved (like adding sensor support). The migration system provided a safety net and a clear history of schema changes. However, we recognized the importance of carefully reviewing generated migrations and understanding their impact before applying them, especially in collaborative or production environments.
 
-**2.2. Entity Relationship Model (ERM):**
+**2.2. Entity Relationship Model (ERM) - Detailed**
 
-The database schema consists of the following core entities and their relationships:
+The database schema evolved to support both manual and sensor-based inventory tracking:
 
-*   **User:** Represents individuals interacting with the system.
-    *   `UserId` (PK, int, Identity)
-    *   `Name` (nvarchar(max), NOT NULL)
-    *   `Role` (nvarchar(max), NOT NULL) - *Could be enhanced with a separate Role table.*
-    *   `Email` (nvarchar(max), NOT NULL) - *Could have a UNIQUE constraint.*
-    *   *Relationships:*
-        *   One User **can perform** multiple Transactions (One-to-Many with `Transaction`).
-        *   One User **can generate** multiple Reports (One-to-Many with `Report`).
+*   **User:** Represents system users.
+    *   `UserId` (PK, int, Identity): Unique identifier.
+    *   `Name` (nvarchar(max), NOT NULL): User's full name.
+    *   `Role` (nvarchar(max), NOT NULL): User's role (e.g., "Admin", "Staff"). *Improvement: Could be normalized into a separate `Roles` table with a foreign key relationship.*
+    *   `Email` (nvarchar(max), NOT NULL): User's email address. *Improvement: Could have a UNIQUE constraint added.*
+    *   *Relationships:* One-to-Many with `Transaction` (User performing manual transaction), One-to-Many with `Report` (User generating report).
 
-*   **Product:** Represents the items being tracked in inventory.
-    *   `ProductId` (PK, int, Identity)
-    *   `Name` (nvarchar(max), NOT NULL)
-    *   `Barcode` (nvarchar(max), NULL) - Optional field for barcode scanning integration.
-    *   `Quantity` (int, NOT NULL) - Current stock level.
-    *   `MinimumThreshold` (int, NOT NULL, Default: 0) - The level at which a low-stock alert should be triggered.
-    *   `ExpiryDate` (datetime2, NULL) - Optional field for perishable goods.
-    *   *Relationships:*
-        *   One Product **can be involved in** multiple Transactions (One-to-Many with `Transaction`).
-        *   One Product **can trigger** multiple Alerts (One-to-Many with `Alert`).
+*   **Product:** Represents inventory items. **(Evolved Model)**
+    *   `ProductId` (PK, int, Identity): Unique identifier.
+    *   `Name` (nvarchar(max), NOT NULL): Product name.
+    *   `Barcode` (nvarchar(max), NULL): Optional barcode identifier.
+    *   `Quantity` (int, NOT NULL): Manually tracked quantity (used if `ThresholdType` is "Quantity").
+    *   `MinimumThreshold` (int, NOT NULL, Default: 0): The threshold value (either quantity or weight).
+    *   `ExpiryDate` (datetime2, NULL): Optional expiry date.
+    *   `CurrentWeight` (decimal(18,2), NULL): **(New)** Stores the latest weight reported by an associated sensor. Nullable to support quantity-tracked items. Mapped to `decimal(18, 2)` for precision.
+    *   `SensorId` (nvarchar(max), NULL): **(New)** Identifier linking the product to a specific weight sensor (matches ID sent by Python script). Nullable.
+    *   `ThresholdType` (nvarchar(max), NOT NULL, Default: "Quantity"): **(New)** Specifies whether alerts are based on "Quantity" or "Weight".
+    *   *Relationships:* One-to-Many with `Transaction` (Product involved in manual transaction), One-to-Many with `Alert` (Product triggering alert).
 
-*   **Transaction:** Records every change in a product's stock quantity.
-    *   `TransactionId` (PK, int, Identity)
-    *   `UserId` (FK, int, NOT NULL) - References `User.UserId`. Indicates who performed the transaction.
-    *   `ProductId` (FK, int, NOT NULL) - References `Product.ProductId`. Indicates which product was affected.
-    *   `Quantity` (int, NOT NULL) - The change in quantity. Positive values indicate stock increase (e.g., purchase), negative values indicate stock decrease (e.g., sale). *Improvement: Add a `TransactionType` (e.g., "Purchase", "Sale", "Adjustment") field for clarity instead of relying solely on the sign of Quantity.*
-    *   `TransactionDate` (datetime2, NOT NULL) - Timestamp of the transaction.
-    *   *Relationships:*
-        *   Many Transactions **are performed by** one User (Many-to-One with `User`).
-        *   Many Transactions **involve** one Product (Many-to-One with `Product`).
+*   **Transaction:** Records manual stock changes.
+    *   `TransactionId` (PK, int, Identity): Unique identifier.
+    *   `UserId` (FK, int, NOT NULL): References `User.UserId`.
+    *   `ProductId` (FK, int, NOT NULL): References `Product.ProductId`.
+    *   `Quantity` (int, NOT NULL): Change in quantity (+ for in, - for out).
+    *   `TransactionDate` (datetime2, NOT NULL): Timestamp.
+    *   *Relationships:* Many-to-One with `User`, Many-to-One with `Product`.
 
-*   **Report:** Represents generated inventory reports (currently a basic structure).
-    *   `ReportId` (PK, int, Identity)
-    *   `UserId` (FK, int, NOT NULL) - References `User.UserId`. Indicates who generated the report.
-    *   `ReportType` (nvarchar(max), NOT NULL) - Type of report (e.g., "Low Stock", "Full Inventory").
-    *   `GeneratedDate` (datetime2, NOT NULL) - Timestamp of report generation.
-    *   *Relationships:*
-        *   Many Reports **are generated by** one User (Many-to-One with `User`).
+*   **Report:** Basic structure for generated reports.
+    *   `ReportId` (PK, int, Identity): Unique identifier.
+    *   `UserId` (FK, int, NOT NULL): References `User.UserId`.
+    *   `ReportType` (nvarchar(max), NOT NULL): Type description.
+    *   `GeneratedDate` (datetime2, NOT NULL): Timestamp.
+    *   *Relationships:* Many-to-One with `User`.
 
-*   **Alert:** Represents system notifications, primarily for low stock levels.
-    *   `AlertId` (PK, int, Identity)
-    *   `ProductId` (FK, int, NOT NULL) - References `Product.ProductId`. Indicates which product triggered the alert.
-    *   `Message` (nvarchar(max), NOT NULL) - The alert message content.
-    *   `AlertDate` (datetime2, NOT NULL) - Timestamp when the alert was generated.
-    *   `IsRead` (bit, NOT NULL) - Flag indicating if the alert has been acknowledged/read by a user.
-    *   *Relationships:*
-        *   Many Alerts **can be triggered by** one Product (Many-to-One with `Product`).
+*   **Alert:** System notifications.
+    *   `AlertId` (PK, int, Identity): Unique identifier.
+    *   `ProductId` (FK, int, NOT NULL): References `Product.ProductId`.
+    *   `Message` (nvarchar(max), NOT NULL): Alert content (e.g., "Low Stock", "Missing Product").
+    *   `AlertDate` (datetime2, NOT NULL): Timestamp.
+    *   `IsRead` (bit, NOT NULL): Status flag (false = unread/active, true = read/historical).
+    *   *Relationships:* Many-to-One with `Product`.
 
 **2.3. Conceptual Schema Diagram:**
 
@@ -181,6 +185,9 @@ erDiagram
         int Quantity
         int MinimumThreshold
         datetime ExpiryDate NULL
+        decimal CurrentWeight NULL "Nullable"
+        string SensorId NULL "Nullable, FK (Conceptually)"
+        string ThresholdType "Default 'Quantity'"
     }
     TRANSACTION {
         int TransactionId PK
@@ -203,21 +210,25 @@ erDiagram
         bool IsRead
     }
 ```
-`[SCREENSHOT HERE: SQL Server Object Explorer in Visual Studio or SSMS showing the created tables and their columns/keys]`
+*(Note: The `SensorId` in `Product` conceptually links to an external sensor system, not typically enforced via a database FK unless sensors were also modeled as a table).*
+
+`[SCREENSHOT HERE: SQL Server Object Explorer in Visual Studio or SSMS showing the updated tables (especially Product) and their columns/keys]`
 
 **2.4. Data Integrity Mechanisms:**
 
 Data integrity is maintained through a combination of database and application-level strategies:
 
 *   **Database Level:**
-    *   **Primary Keys (PK):** Uniquely identify each record in a table (e.g., `ProductId` in `Products`). Enforced by SQL Server.
-    *   **Foreign Keys (FK):** Ensure referential integrity between related tables (e.g., a `Transaction` must relate to an existing `Product` and `User`). Enforced by SQL Server based on EF Core configuration.
-    *   **Data Types:** SQL Server enforces data types defined by EF Core migrations (e.g., preventing text insertion into an `int` column).
-    *   **Nullability:** Constraints prevent NULL values in columns defined as non-nullable in the C# models (e.g., `Product.Name`).
-    *   **T-SQL Checks:** Custom scripts (`SqlTests/CheckProductConstraints.sql`) provide additional business rule validation (e.g., quantity >= 0).
+    *   **Primary Keys (PK):** Enforced by SQL Server (e.g., `ProductId`).
+    *   **Foreign Keys (FK):** Enforced by SQL Server based on EF Core configuration, ensuring valid relationships (e.g., `Alert.ProductId` must exist in `Product`).
+    *   **Data Types:** SQL Server enforces types (e.g., `decimal(18,2)` for `CurrentWeight`, `bit` for `IsRead`).
+    *   **Nullability:** Constraints prevent NULLs where specified (e.g., `Product.Name`, `Product.ThresholdType`).
+    *   **Defaults:** Default values applied (e.g., `Product.MinimumThreshold = 0`, `Product.ThresholdType = 'Quantity'`).
+    *   **T-SQL Checks:** Custom scripts (`SqlTests/CheckProductConstraints.sql`) provide additional validation (e.g., quantity >= 0).
 *   **Application Level:**
-    *   **Model Validation:** ASP.NET Core MVC's model binding and validation system (`ModelState.IsValid` in controllers) checks for required fields and potentially data annotations (like `[Required]`, `[StringLength]`, etc., though minimally used in current models). Example: `ProductsController` explicitly checks for non-empty `Name`.
-    *   **Business Logic:** Controller actions contain logic that implicitly validates data before saving (e.g., calculating stock levels before deciding to create an alert).
+    *   **Model Validation:** ASP.NET Core MVC's `ModelState.IsValid` checks, including explicit controller logic (e.g., non-empty `Product.Name`). Data annotations (`[Required]`, `[Range]`) could be added to models for more declarative validation.
+    *   **Business Logic:** Controller actions and services (`WeightSensorStatusService`) contain logic ensuring data consistency (e.g., checking `ThresholdType` before evaluating weight, managing restocking timers).
+    *   **API Input Handling:** The `WeightIntegrationController` implicitly validates incoming data types from the Python script.
 
 ---
 
@@ -229,93 +240,102 @@ Data integrity is maintained through a combination of database and application-l
 *   **Language:** C# 12
 *   **Database:** Microsoft SQL Server
 *   **Object-Relational Mapper (ORM):** Entity Framework Core 8
-*   **Frontend:** Razor Views, HTML5, CSS3, Bootstrap 5 (default template), JavaScript (minimal custom)
-*   **Real-time Communication:** ASP.NET Core SignalR (basic hub implemented)
+*   **Frontend:** Razor Views (CSHTML), HTML5, CSS3, Bootstrap 5, JavaScript (including SignalR client)
+*   **Real-time Communication:** ASP.NET Core SignalR
 *   **Testing Frameworks:** MSTest (Unit Testing), Moq (Mocking), T-SQL (Database Testing)
-*   **Development Environment:** Microsoft Visual Studio 2022 (or later) with the ASP.NET and web development workload, .NET 8 SDK, SQL Server Management Studio (optional)
+*   **Development Environment:** Microsoft Visual Studio 2022 (or later) with the ASP.NET and web development workload, .NET 8 SDK
+*   **External Simulation:** Python (for `ocr_sender.py`)
+*   **Package Management:** NuGet (via Visual Studio), LibMan (for client-side libraries like SignalR JS)
 
 **3.2. Architectural Pattern: Model-View-Controller (MVC)**
 
-> Stock_Ease is built using the well-established **Model-View-Controller (MVC)** architectural pattern. This pattern promotes separation of concerns, making the application more organized, maintainable, and testable.
+> We built Stock_Ease using the well-established **Model-View-Controller (MVC)** architectural pattern. This pattern promotes separation of concerns, making the application more organized, maintainable, and testable.
 
-*   **Model:** Represents the application's data and business logic.
-    *   **Domain Models:** POCO classes in `Models/DomainModels.cs` (e.g., `Product`, `User`) define the structure of the data.
-    *   **Data Access:** The `Stock_EaseContext` class (`Data/stock_ease_context.cs`) acts as the primary gateway to the database, utilizing EF Core to map domain models to database tables and execute queries.
-    *   **Business Logic:** While some logic resides in controllers currently, in a larger application, this might be encapsulated in separate service classes.
+*   **Model:** Represents the application's data structures and potentially business logic.
+    *   **Domain Models:** POCO classes in `Models/DomainModels.cs` (e.g., `Product`, `User`, `Alert`). These define the entities mapped to the database by EF Core.
+    *   **View Models:** Although not explicitly used extensively here (controllers often pass domain models directly), in larger apps, dedicated View Models would be created to shape data specifically for a View. `Models/ErrorViewModel.cs` is an example.
+    *   **Data Access Layer (DAL):** Primarily encapsulated within the `Stock_EaseContext` (`Data/stock_ease_context.cs`), which handles database interactions via EF Core.
+    *   **Business Logic:** Resides partly in Controllers and partly in dedicated Services (like `WeightSensorStatusService`).
 
-*   **View:** Responsible for presenting the data to the user and rendering the user interface.
-    *   Located in the `Views/` directory, organized by controller (e.g., `Views/Products/`).
-    *   Uses **Razor syntax** (`.cshtml` files) to combine HTML markup with C# code to dynamically generate HTML responses.
-    *   Includes shared layout elements (`Views/Shared/_Layout.cshtml`, `_Sidebar.cshtml`) for consistent UI structure.
-    *   Leverages CSS (e.g., `wwwroot/css/site.css`, Bootstrap) for styling and JavaScript (`wwwroot/js/site.js`) for client-side interactivity.
+*   **View:** Responsible for rendering the user interface based on data provided by the Controller.
+    *   Located in `Views/`, organized by controller subfolders (e.g., `Views/Products/`, `Views/Alerts/`).
+    *   Uses **Razor syntax** (`.cshtml`) to embed C# code within HTML for dynamic content generation (e.g., looping through products, displaying model properties).
+    *   Includes shared layouts (`_Layout.cshtml`) and partial views (`_Sidebar.cshtml`, `_ValidationScriptsPartial.cshtml`) for consistent structure and code reuse.
+    *   Utilizes CSS (`wwwroot/css/site.css`, Bootstrap) for styling and JavaScript (`wwwroot/js/site.js`, SignalR client script) for client-side behavior and real-time updates.
 
-*   **Controller:** Acts as the intermediary between the Model and the View.
-    *   Located in the `Controllers/` directory (e.g., `ProductsController.cs`).
-    *   Receives HTTP requests from the client (browser).
-    *   Interprets user input (route data, query strings, form data).
-    *   Interacts with the Model (via the `DbContext`) to retrieve or update data using LINQ and EF Core methods.
-    *   Selects the appropriate View to render and passes necessary data (view models) to it.
-    *   Returns an HTTP response (typically HTML rendered by the View) to the client.
+*   **Controller:** Handles incoming HTTP requests, orchestrates interactions between the Model and View.
+    *   Located in `Controllers/` (e.g., `ProductsController.cs`, `WeightIntegrationController.cs`).
+    *   Action methods within controllers are mapped to specific URLs via routing.
+    *   Interprets user input (from route parameters, query strings, form submissions).
+    *   Uses injected services (like `Stock_EaseContext`, `WeightSensorStatusService`, `IHubContext<TransactionHub>`) to interact with data and perform business logic.
+    *   Selects the appropriate View to render, often passing a Model object or data via `ViewData`/`ViewBag`.
+    *   Returns an HTTP response (e.g., HTML from a View, JSON from an API action, Redirect).
 
-**3.3. Dependency Injection (DI):**
+**3.3. Dependency Injection (DI) Explained**
 
-> ASP.NET Core has built-in support for Dependency Injection, which is utilized in Stock_Ease:
+> ASP.NET Core's built-in Dependency Injection container is central to our application's architecture, promoting loose coupling and testability.
 
-*   **Service Registration:** In `Program.cs`, services like the `Stock_EaseContext` are registered with the DI container.
+*   **Service Registration (`Program.cs`):** This is where we told the DI container about our services and how they should be created.
+    *   **DbContext:** `builder.Services.AddDbContext<Stock_EaseContext>(...)` registers the database context, typically with a scoped lifetime (one instance per HTTP request).
+    *   **Controllers:** `builder.Services.AddControllersWithViews()` registers all MVC controllers.
+    *   **SignalR:** `builder.Services.AddSignalR()` registers SignalR services. `app.MapHub<TransactionHub>("/transactionHub")` maps the hub endpoint.
+    *   **Custom Services:** `builder.Services.AddSingleton<WeightSensorStatusService>()` registers our custom service. We chose Singleton lifetime here assuming we wanted a single instance managing sensor state across the application. Scoped or Transient might be appropriate depending on exact requirements.
+    `[SCREENSHOT HERE: Code snippet from Program.cs showing service registrations]`
+*   **Constructor Injection:** Services are "injected" into the constructors of classes that need them (primarily controllers and potentially other services). The DI container automatically resolves and provides the required instances.
     ```csharp
-    // Example from Program.cs (conceptual)
-    builder.Services.AddDbContext<Stock_EaseContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Stock_EaseContext")));
-    builder.Services.AddScoped<AlertsController>(); // Registering controllers if needed for injection
-    builder.Services.AddControllersWithViews();
-    ```
-*   **Constructor Injection:** Controllers receive their dependencies (like the `DbContext` or other controllers/services) through their constructors. ASP.NET Core automatically provides instances from the DI container.
-    ```csharp
-    // From ProductsController.cs
-    public class ProductsController(Stock_EaseContext context, AlertsController alertsController) : Controller
+    // WeightIntegrationController needing DbContext, HubContext, and the custom service
+    public class WeightIntegrationController(Stock_EaseContext context, IHubContext<TransactionHub> hubContext, WeightSensorStatusService sensorService) : ControllerBase
     {
-        private readonly Stock_EaseContext _context = context; // Injected DbContext
-        private readonly AlertsController _alertsController = alertsController; // Injected Controller
-        // ...
+        private readonly Stock_EaseContext _context = context;
+        private readonly IHubContext<TransactionHub> _hubContext = hubContext;
+        private readonly WeightSensorStatusService _sensorService = sensorService;
+        // ... action methods using _context, _hubContext, _sensorService ...
     }
     ```
-*   **Benefits:** DI promotes loose coupling, making components easier to test (by injecting mocks) and maintain.
+*   **Benefits:**
+    *   **Decoupling:** Controllers don't need to know how to create a `DbContext` or `WeightSensorStatusService`; they just declare their need for one.
+    *   **Testability:** During unit testing, we can easily inject mock implementations of dependencies (like a mock `DbContext` or `IHubContext`) instead of real ones.
+    *   **Maintainability:** Changing the implementation of a service (e.g., how `WeightSensorStatusService` stores data) only requires changes in the service class and potentially its registration, not in every controller that uses it.
 
-**3.4. Request Lifecycle (Simplified):**
+**3.4. Request Lifecycle Example (Product Edit)**
 
-1.  User navigates to a URL (e.g., `/Products/Edit/5`).
-2.  ASP.NET Core Routing middleware maps the URL to the `Edit` action on the `ProductsController`, extracting the `id` parameter (5).
-3.  The DI container creates an instance of `ProductsController`, injecting its dependencies (`Stock_EaseContext`, `AlertsController`).
-4.  The `Edit` action method executes.
-5.  It uses the injected `_context` to query the database for the Product with ID 5 (`_context.Products.FindAsync(id)`).
-6.  If found, the controller creates a View Model (in this case, the `Product` object itself) and passes it to the `View()` method.
-7.  The Razor View Engine locates the corresponding view (`Views/Products/Edit.cshtml`).
-8.  The view executes, rendering HTML using the provided model data.
-9.  The controller returns the rendered HTML as an HTTP response to the user's browser.
+1.  **Request:** User clicks "Edit" link for Product 5 (`/Products/Edit/5`). Browser sends GET request.
+2.  **Routing:** ASP.NET Core maps the URL to `ProductsController.Edit(int id)` action, with `id = 5`.
+3.  **Controller Activation:** DI container creates `ProductsController`, injecting `Stock_EaseContext` and `AlertsController`.
+4.  **Action Execution:** `Edit(5)` action runs.
+5.  **Data Fetching:** `_context.Products.FindAsync(5)` is called, executing a SQL query (`SELECT * FROM Products WHERE ProductId = 5`).
+6.  **Model Preparation:** If the product is found, it's passed to the `View(product)` method.
+7.  **View Selection:** Razor engine finds `Views/Products/Edit.cshtml`.
+8.  **View Rendering:** `Edit.cshtml` executes, using the `@model Product` to generate HTML form fields pre-filled with the product's data.
+9.  **Response:** The generated HTML is sent back to the browser.
+
+**3.5. Service Layer Introduction (`WeightSensorStatusService`)**
+
+As complexity grew with sensor integration, we introduced a dedicated service (`Services/WeightSensorStatusService.cs`) to encapsulate logic related to managing sensor state and restocking timers.
+
+*   **Purpose:** To centralize the tracking of sensor data (last known weight, restocking status) independently of individual controllers.
+*   **Implementation:** Likely uses a dictionary or similar structure to store state per `SensorId`. Contains methods like `UpdateSensorWeight`, `IsRestocking`, `StartRestockingTimer`, etc. Registered as a Singleton in `Program.cs` to maintain state across requests.
+*   **Benefits:** Adheres to the Single Responsibility Principle, making the `WeightIntegrationController` cleaner and the sensor logic reusable and easier to test independently (though dedicated tests for the service are currently a gap).
 
 ---
 
 ## 4. ⚙️ Building the Application: Functionality and Implementation Story
 
-> With the database structure in place, we focused on building the core application features using the MVC pattern within Visual Studio. This involved creating controllers to handle requests, views to display information, and using EF Core for data interaction.
+> With the database structure and architecture defined, we proceeded to implement the application's features, starting with core CRUD and then adding more advanced capabilities like sensor integration and real-time updates.
 
-**4.1. Managing Products (`ProductsController`, `Views/Products/`)**
+**4.1. Core CRUD - Managing Products (`ProductsController`, `Views/Products/`)**
 
-This was one of the first modules we tackled, implementing the full CRUD lifecycle for products.
+This foundational module allows users to manage the product catalog.
 
 *   **Displaying the Product List (Index View):**
-    *   The journey starts when a user navigates to `/Products`. The `Index()` action in `ProductsController` is invoked.
-    *   Inside the action, we use EF Core (`await _context.Products.ToListAsync()`) to fetch all products from the database.
-    *   This list is passed as the model to the `Views/Products/Index.cshtml` Razor view.
-    *   The view uses a `@foreach` loop to render an HTML table, displaying each product's details along with links to Edit, View Details, or Delete.
+    *   Implemented the `Index()` action in `ProductsController` using `await _context.Products.ToListAsync()` to fetch data.
+    *   Created the `Views/Products/Index.cshtml` view using Razor syntax (`@model List<Product>`, `@foreach`) to display the data in an HTML table, styled with Bootstrap. Added action links (Details, Edit, Delete) using tag helpers (`asp-action`, `asp-route-id`).
         `[SCREENSHOT HERE - Webpage: Running application showing the Product Index page with sample data in the table]`
 *   **Adding a New Product (Create View & Action):**
-    *   Clicking the "Create New" link triggers the `Create()` GET action, which simply displays the empty form defined in `Views/Products/Create.cshtml`.
+    *   We implemented the `Create()` GET action to return the view.
+    *   We created the `Views/Products/Create.cshtml` view with a form (`<form asp-action="Create">`) using tag helpers (`<input asp-for="Name">`, `<span asp-validation-for="Name">`) for model binding and validation message display.
         `[SCREENSHOT HERE - Webpage: Running application showing the empty Create Product form]`
-    *   When the user fills the form and submits, the `Create()` POST action receives the `Product` object (thanks to ASP.NET Core's model binding).
-    *   We added validation logic: first checking `ModelState.IsValid` (which checks data annotations, though we added few) and then an explicit check for an empty `Name`. *Challenge:* ⚠️ Initially, we relied only on `ModelState`, but realized explicit checks were needed for certain business rules like non-empty names, leading to adding `ModelState.AddModelError`.
-    *   If valid, the new product is added to the `DbContext` (`_context.Add(product)`) and persisted to the database (`await _context.SaveChangesAsync()`). The user is then redirected back to the product list (Index view).
-    *   If invalid, the same Create view is redisplayed, showing the validation error messages next to the problematic fields.
+    *   We implemented the `Create()` POST action with `[HttpPost]` and `[ValidateAntiForgeryToken]` attributes. We used model binding to receive the `Product` object, added `ModelState.IsValid` check and explicit validation for `Name`. We used `_context.Add()` and `await _context.SaveChangesAsync()` to save valid data, redirected on success using `RedirectToAction(nameof(Index))`, and returned the view with the model on validation failure. *Challenge:* ⚠️ We initially forgot `[ValidateAntiForgeryToken]` and the corresponding tag helper in the view, leaving a potential security vulnerability which we later corrected.
     ```csharp
     // Snippet from ProductsController Create (POST) - Illustrating validation and save
     if (string.IsNullOrWhiteSpace(product.Name)) // Explicit validation
@@ -337,125 +357,201 @@ This was one of the first modules we tackled, implementing the full CRUD lifecyc
     return View(product);
     ```
 *   **Updating Existing Products (Edit View & Action):**
-    *   Clicking "Edit" on the Index page calls the `Edit()` GET action with the product's `id`.
-    *   The action fetches the specific product (`_context.Products.FindAsync(id)`). If not found, it returns a standard 404 page.
-    *   If found, the product data is passed to the `Views/Products/Edit.cshtml` view, which renders the form pre-filled with the existing details.
+    *   We implemented the `Edit()` GET action: Fetch product using `FindAsync(id)`, handle not found case, pass product to `Views/Products/Edit.cshtml`.
+    *   We created the `Edit.cshtml` view, similar to Create but pre-filled using the `@model Product`. Included a hidden input for `ProductId`.
         `[SCREENSHOT HERE - Webpage: Running application showing the Edit Product form pre-filled with data]`
-    *   Submitting the form triggers the `Edit()` POST action.
-    *   Similar validation (`ModelState.IsValid`) occurs.
-    *   If valid, EF Core is told the entity is modified (`_context.Update(product)`), and `SaveChangesAsync()` executes the UPDATE SQL command. We also added a call here to `_alertsController.CheckAndCreateLowStockAlert` to ensure alerts are triggered immediately after stock levels change. The user is redirected to the Index. *Challenge:* ⚠️ Handling potential `DbUpdateConcurrencyException` was added to manage scenarios where data might have been changed by another user between loading and saving.
+    *   We implemented the `Edit()` POST action: Validate ID match, check `ModelState`, use `_context.Update()` and `SaveChangesAsync()`. We added a call to `_alertsController.CheckAndCreateLowStockAlert` and implemented basic `DbUpdateConcurrencyException` handling. *Challenge:* ⚠️ We realized the need for concurrency checking (`DbUpdateConcurrencyException`) to handle cases where two users might edit the same product simultaneously. We added a `[Timestamp]` attribute to a model property (if needed, or relied on EF Core's default tracking).
 *   **Viewing Product Details (Details View):**
-    *   Clicking "Details" calls the `Details()` action, fetching the product by `id`.
-    *   The data is passed to the `Views/Products/Details.cshtml` view for a read-only display.
+    *   We implemented the `Details()` action: Fetch product using `FirstOrDefaultAsync()` (or `FindAsync`), pass to `Views/Products/Details.cshtml`.
+    *   We created the `Details.cshtml` view using `@model Product` to display properties, often using `<dl>`, `<dt>`, `<dd>` tags.
         `[SCREENSHOT HERE - Webpage: Running application showing the Product Details page]`
 *   **Removing Products (Delete View & Action):**
-    *   Clicking "Delete" calls the `Delete()` GET action, fetching the product and displaying a confirmation page (`Views/Products/Delete.cshtml`). This prevents accidental deletions.
+    *   We implemented the `Delete()` GET action: Fetch product, pass to `Views/Products/Delete.cshtml` for confirmation.
         `[SCREENSHOT HERE - Webpage: Running application showing the Delete Product confirmation page]`
-    *   Confirming the deletion triggers the `DeleteConfirmed()` POST action.
-    *   The product is fetched again, marked for removal (`_context.Products.Remove(product)`), and `SaveChangesAsync()` executes the DELETE SQL command. The user is redirected to the Index.
+    *   We created the `Delete.cshtml` view displaying product details and a confirmation form.
+    *   We implemented the `DeleteConfirmed()` POST action with `[HttpPost, ActionName("Delete")]`: Fetch product, use `_context.Remove()`, `SaveChangesAsync()`, redirect to Index.
 
-**4.2. Recording Transactions (`TransactionsController`, `Views/Transactions/`)**
+**4.2. Core CRUD - Recording Transactions (`TransactionsController`, `Views/Transactions/`)**
 
-Implementing transaction management followed a similar CRUD pattern but introduced new considerations:
+This module handles manual stock adjustments.
 
-*   **Linking to Users and Products:** The Create/Edit transaction forms required dropdown lists to select the relevant User and Product. This involved fetching lists of Users and Products in the controller actions and passing them to the view using `ViewData` or `ViewBag` to populate `SelectList` helpers in the Razor view.
+*   **Implementation:** We followed the same CRUD pattern as Products.
+*   **Key Feature:** We used `ViewData["UserId"] = new SelectList(...)` and `ViewData["ProductId"] = new SelectList(...)` in GET actions to populate dropdowns in the Create/Edit views (`<select asp-for="UserId" asp-items="ViewBag.UserId">`).
     `[SCREENSHOT HERE - Webpage: Running application showing the Create Transaction form with User/Product dropdowns]`
-*   **Stock Level Impact:** The sign of the `Quantity` field dictates whether stock is increased or decreased. *Challenge/Improvement:* ⚠️ We noted that relying solely on the sign isn't always clear; adding a dedicated `TransactionType` field ("Purchase", "Sale", "Adjustment") would make the intent more explicit and reporting easier. Furthermore, ensuring the `Product.Quantity` is updated atomically when a transaction is saved requires careful handling, potentially within a database transaction (`DbContext.Database.BeginTransaction()`) or a dedicated service layer, which was identified as an area for future enhancement.
+*   **Challenge/Improvement:** ⚠️ We identified the logic to *automatically update* `Product.Quantity` based on `Transaction.Quantity` as a critical missing piece for data consistency. This should ideally happen within the `TransactionController`'s POST actions, potentially wrapped in a database transaction (`await using var transaction = await _context.Database.BeginTransactionAsync(); ... transaction.CommitAsync();`) to ensure atomicity. This remains an area for our future enhancement.
 
-**4.3. User, Alert, and Report Management:**
+**4.3. Core CRUD - User, Alert, and Report Management**
 
-*   These controllers (`UsersController`, `AlertsController`, `ReportsController`) and their corresponding views implement standard CRUD operations following the same principles established in `ProductsController`.
-*   `AlertsController` includes the `CheckAndCreateLowStockAlert` method, which is called by `ProductsController` after an edit. This method likely fetches the product, compares `Quantity` to `MinimumThreshold`, and creates an `Alert` record if needed.
+*   We implemented basic CRUD operations for `User`, `Alert`, and `Report` entities following the established MVC pattern (`UsersController`, `AlertsController`, `ReportsController` and corresponding Views).
+*   We included specific logic in Alerts for displaying unread vs. historical alerts (see Section 4.7).
 
-**4.4. Data Access with LINQ & EF Core:**
+**4.4. Data Access Strategy: LINQ & EF Core**
 
-> Throughout the controllers, LINQ queries are used with the `DbContext` to interact with the database:
+> Throughout the application, we consistently handled data access using Entity Framework Core and LINQ queries within controller action methods (and later, services).
 
-*   Fetching Lists: `_context.Products.ToListAsync()`
-*   Fetching Single Item: `_context.Products.FindAsync(id)`, `_context.Products.FirstOrDefaultAsync(p => p.ProductId == id)`
-*   Filtering: `_context.Products.Where(p => p.Quantity < p.MinimumThreshold).ToListAsync()` (Example for low stock)
-*   Adding Data: `_context.Add(entity)`
-*   Updating Data: `_context.Update(entity)`
-*   Deleting Data: `_context.Remove(entity)`
-*   Saving Changes: `await _context.SaveChangesAsync()` (Executes the generated SQL against the database)
+*   **Querying:**
+    *   Fetching all items: `await _context.Products.ToListAsync()`
+    *   Fetching single item by PK: `await _context.Products.FindAsync(id)`
+    *   Fetching single item with criteria: `await _context.Products.FirstOrDefaultAsync(p => p.SensorId == sensorId)`
+    *   Filtering: `_context.Alerts.Where(a => a.ProductId == productId && !a.IsRead)`
+    *   Including related data (Eager Loading): `await _context.Transactions.Include(t => t.User).Include(t => t.Product).ToListAsync()` (Used in Transaction Index/Details)
+*   **Saving Changes:**
+    *   Adding: `_context.Add(newProduct);`
+    *   Updating: `_context.Update(existingProduct);` (EF Core tracks changes to loaded entities, so often just modifying properties is enough before SaveChanges)
+    *   Deleting: `_context.Remove(productToDelete);`
+    *   Persisting: `await _context.SaveChangesAsync();` (Bundles all tracked changes into a database transaction and executes the necessary SQL).
+
+**4.5. Advanced Feature: Weight Sensor Integration**
+
+> To enhance realism and explore hardware integration, we added functionality to track product levels using simulated weight sensor data.
+
+*   **Database Changes:** We added `CurrentWeight` (decimal), `SensorId` (string), and `ThresholdType` (string) to the `Product` model. We generated and applied corresponding EF Core migrations (`AddCurrentWeightToProduct`, `AddSensorIdToProduct`, `AddThresholdTypeToProduct`).
+    `[SCREENSHOT HERE: Code snippet of Product model showing new properties]`
+    `[SCREENSHOT HERE: Package Manager Console showing Add/Update for these migrations]`
+*   **API Endpoint (`WeightIntegrationController`):** We created a minimal API controller (`[ApiController]`, `[Route("api/[controller]")]`) with a POST action `ScreenData` at `/api/weightintegration/screendata`. This endpoint receives JSON data (`{ "SensorId": "...", "Value": "..." }`) from the external script.
+    `[SCREENSHOT HERE: Code snippet of WeightIntegrationController.ScreenData action]`
+*   **Data Processing:** The `ScreenData` action:
+    1.  Finds the `Product` matching the incoming `SensorId`.
+    2.  Parses the incoming weight `Value` (string) to a `decimal`.
+    3.  Updates the `product.CurrentWeight`.
+    4.  Calls the `WeightSensorStatusService` to update its internal state.
+    5.  Checks if an alert should be generated based on `ThresholdType`, `CurrentWeight`, `MinimumThreshold`, and the restocking timer status from the service.
+    6.  Saves changes to the database (`_context.SaveChangesAsync()`).
+    7.  Calls the SignalR hub to broadcast the weight update.
+*   **Sensor Status Service (`WeightSensorStatusService`):** A Singleton service injected via DI. It maintains in-memory state (e.g., using a `ConcurrentDictionary<string, SensorStatus>`) for each known `SensorId`, tracking `LastKnownWeight` and managing the "restocking timer" logic described below.
+    `[SCREENSHOT HERE: Code snippet from WeightSensorStatusService showing state management or timer logic]`
+*   **UI Integration:** We modified `Views/Products/Create.cshtml` and `Edit.cshtml` to include a dropdown for `ThresholdType` ("Quantity", "Weight") and a dropdown for `SensorId` (populated from `WeightSensorStatusService.GetActiveSensorIds()` via `ViewBag` in the controller). We updated `Details.cshtml` and `Index.cshtml` to display these new fields.
+    `[SCREENSHOT HERE - Webpage: Product Edit form showing ThresholdType and SensorId dropdowns]`
+    `[SCREENSHOT HERE - Webpage: Product Details page showing CurrentWeight, SensorId, ThresholdType]`
+
+**4.6. Advanced Feature: Real-time UI Updates with SignalR**
+
+> To provide immediate feedback on weight changes without requiring page refreshes, we implemented SignalR.
+
+*   **Hub (`TransactionHub`):** We defined a simple hub (`Hubs/TransactionHub.cs`) with a method `SendWeightUpdate(string sensorId, decimal weight)`. This method isn't called directly by clients but is used by the server to send messages *to* clients.
+    `[SCREENSHOT HERE: Code snippet of TransactionHub.cs]`
+*   **Server-Side Invocation:** We injected `IHubContext<TransactionHub>` into `WeightIntegrationController`. After successfully saving a weight update, we called `_hubContext.Clients.All.SendAsync("ReceiveWeightUpdate", sensorId, weight);` to broadcast the update to all connected clients.
+    `[SCREENSHOT HERE: Code snippet in WeightIntegrationController calling SendAsync]`
+*   **Client-Side Library:** We added the SignalR JavaScript client library using LibMan (`libman.json`) to ensure it was correctly included in `wwwroot/lib/microsoft/signalr/dist/browser/`. *Challenge:* ⚠️ We initially faced 404 errors loading the script until LibMan was configured correctly.
+    `[SCREENSHOT HERE: libman.json configuration for SignalR]`
+*   **Client-Side Logic (`Views/Products/Index.cshtml`):** We added JavaScript to:
+    1.  Establish a connection to the `/transactionHub` endpoint.
+    2.  Register a handler for the `ReceiveWeightUpdate` message using `connection.on("ReceiveWeightUpdate", function (sensorId, weight) { ... });`.
+    3.  Inside the handler, find the table row (`<tr>`) corresponding to the `sensorId` (using a data attribute like `data-sensor-id="@product.SensorId"` added to the row).
+    4.  Update the text content of the "Current Weight" cell (`<td>`) in that row.
+    5.  Apply a temporary visual highlight (e.g., changing background color) to the updated cell using CSS classes and transitions.
+    `[SCREENSHOT HERE: JavaScript snippet in Products/Index.cshtml showing SignalR connection and handler]`
+    `[SCREENSHOT HERE - Webpage: Product Index page showing a weight value highlighted immediately after an update]`
+
+**4.7. Advanced Feature: Alerting Logic and History**
+
+> We enhanced the alerting system to handle weight-based thresholds, prevent alert fatigue during restocking, and provide a history view.
+
+*   **Threshold Types:** Logic in `WeightIntegrationController` and `ProductsController` now checks `product.ThresholdType` before evaluating `product.Quantity` or `product.CurrentWeight` against `product.MinimumThreshold`.
+*   **Restocking Timer (`WeightSensorStatusService`):**
+    *   When weight drops below a critical point (e.g., 3.0), the service starts a timer (e.g., 10 minutes) for that sensor and marks it as "restocking".
+    *   While restocking, standard "Low Weight" alerts are suppressed.
+    *   If the timer expires before the weight recovers, a "Missing Product" alert is generated.
+    *   If weight recovers above the threshold, the timer is cancelled, and the "restocking" status is cleared.
+*   **Duplicate Alert Prevention:** Before creating a new `Alert` record, the code checks if an *unread* alert (`!IsRead`) already exists for the same product and the same condition (e.g., low weight or missing product). If so, a new alert is not created.
+    `[SCREENSHOT HERE: Code snippet in WeightIntegrationController showing duplicate alert check]`
+*   **Alert Display (`AlertsController`, `Views/Alerts/`):**
+    *   We modified the main `AlertsController.Index` action to fetch only unread alerts (`_context.Alerts.Include(a => a.Product).Where(a => !a.IsRead).ToListAsync()`).
+        `[SCREENSHOT HERE - Webpage: Alerts Index page showing only unread alerts]`
+    *   We added JavaScript to `_Layout.cshtml` to make an API call (e.g., to a new `/api/alerts/markdisplayedread` endpoint, though the implementation details show `/api/alerts/unread` was used, which might imply marking read happens client-side or was intended differently) after alerts are displayed, marking them as read (`IsRead = true`) in the database. *Challenge:* ⚠️ Ensuring alerts were marked as read reliably after being displayed required careful coordination between the view loading and the background API call.
+    *   We added a new `History()` action to `AlertsController` to fetch *read* alerts (`Where(a => a.IsRead)`).
+    *   We created a corresponding `Views/Alerts/History.cshtml` view to display the historical alerts.
+        `[SCREENSHOT HERE - Webpage: Alerts History page showing read alerts]`
+
+**4.8. External Integration Simulation (OCR Script)**
+
+> The `external_scripts/ocr_sender.py` script simulates an external system (like an OCR process reading a weight display) sending data to our application's API.
+
+*   **Functionality:** Sends HTTP POST requests containing JSON payloads (`{"SensorId": "...", "Value": "..."}`) to the `/api/weightintegration/screendata` endpoint at regular intervals.
+*   **Configuration:** Includes flags like `USE_MOCK_DATA` for testing and specifies the target API URL and `SENSOR_ID`.
+*   **Role:** Acts as the data source for the weight sensor integration feature, allowing development and testing without actual hardware.
+    `[SCREENSHOT HERE: Code snippet from ocr_sender.py showing the data payload and POST request]`
 
 ---
 
 ## 5. 🧪 Testing Strategy and Implementation
 
-> A two-pronged testing approach was adopted to ensure both database integrity and application logic correctness.
+> We adopted a two-pronged testing approach to ensure both database integrity and application logic correctness, primarily focusing on the initial CRUD functionality.
 
 **5.1. Database Testing (T-SQL):**
 
-*   **Objective:** To verify database schema constraints and data integrity rules directly at the database level, ensuring data validity regardless of the application accessing it.
-*   **Methodology:** T-SQL scripts containing assertions about the data state.
-*   **Implementation (`SqlTests/CheckProductConstraints.sql`):**
-    *   We wrote a T-SQL script containing several checks, focusing initially on the `Products` table:
-        `[SCREENSHOT HERE: Code snippet of the CheckProductConstraints.sql script]`
-        *   ✅ **Non-Negative Quantity:** `IF EXISTS (SELECT 1 FROM dbo.Products WHERE Quantity < 0)` - A basic but crucial rule to prevent invalid stock levels.
-        *   ✅ **Non-Negative Threshold:** `IF EXISTS (SELECT 1 FROM dbo.Products WHERE MinimumThreshold < 0)` - Ensures alert thresholds are valid.
-        *   ✅ **Non-Empty Name:** `IF EXISTS (SELECT 1 FROM dbo.Products WHERE LTRIM(RTRIM(Name)) = '')` - Basic validation for required text fields.
-    *   Uses `PRINT` statements to indicate test progress and PASS/FAIL status.
-    *   Uses `RAISERROR` with severity 16 to signal a failure, which can be detected by automated tools or stop execution.
-*   **Execution:** Can be executed manually against the target database using SQL Server Management Studio (SSMS) or Visual Studio's integrated **SQL Server Object Explorer**. It can also be incorporated into automated deployment/CI pipelines.
-        `[SCREENSHOT HERE: SSMS or VS SQL Object Explorer showing execution of the T-SQL script and its output]`
+*   **Objective:** To verify database schema constraints and data integrity rules directly at the database level.
+*   **Methodology:** T-SQL scripts (`SqlTests/CheckProductConstraints.sql`) containing assertions.
+*   **Implementation:** Checks for non-negative `Quantity`, non-negative `MinimumThreshold`, and non-empty `Name` in the `Products` table using `IF EXISTS` and `RAISERROR`.
+    `[SCREENSHOT HERE: Code snippet of the CheckProductConstraints.sql script]`
+*   **Execution:** Executed manually using SSMS or Visual Studio's SQL Server Object Explorer.
+    `[SCREENSHOT HERE: SSMS or VS SQL Object Explorer showing execution of the T-SQL script and its output]`
 
 **5.2. Application Unit Testing (C# / MSTest):**
 
-*   **Objective:** To verify the C# code within our controllers worked as expected, independent of the actual database or other components. We aimed to follow TDD principles, writing tests before or alongside the implementation code where possible.
-*   **Methodology:**
-    *   **Framework:** MSTest provides the test structure (`[TestClass]`, `[TestMethod]`, `Assert`).
-    *   **Isolation:** Tests should not depend on external systems like a real database or network services.
-        *   **In-Memory Database:** `Microsoft.EntityFrameworkCore.InMemory` provider is used to create a temporary, isolated database for each test run (`UseInMemoryDatabase(Guid.NewGuid().ToString())`). This allows testing EF Core interactions without SQL Server.
-        *   **Mocking:** Dependencies like the `DbContext` and other controllers (`AlertsController`) needed to be replaced with test doubles. We used the `Moq` library, installed via Visual Studio's **NuGet Package Manager**, to create mock objects. For instance, in `ProductsControllerTests`, we mocked `AlertsController` (`Mock<AlertsController>`) to verify that `CheckAndCreateLowStockAlert` was called during an edit, without actually running the alert logic itself. *Challenge:* ⚠️ Setting up mocks correctly, especially for methods with return values or specific parameters (`It.IsAny<int>`), required careful attention to Moq's syntax.
-    *   **Arrange-Act-Assert (AAA) Pattern:** Each test follows this structure:
-        *   **Arrange:** Set up preconditions. Create mock objects, configure the in-memory database with test data, instantiate the controller-under-test with mocks/test context.
-        *   **Act:** Execute the method being tested (e.g., `await _controller.Edit(testProductId, productToUpdate)`).
-        *   **Assert:** Verify the outcome. Check the return type (`Assert.IsInstanceOfType`), examine the result data, verify changes in the in-memory context (`Assert.AreEqual`), and verify mock interactions (`_mockAlertsController.Verify(...)`).
+*   **Objective:** To test controller action logic in isolation, following TDD principles where feasible.
+*   **Methodology:** We used the MSTest framework, EF Core In-Memory provider for database isolation, and Moq for mocking dependencies. We followed the Arrange-Act-Assert (AAA) pattern.
 *   **Implementation (`Stock_Ease.Tests/ProductsControllerTests.cs`):**
-    *   A dedicated MSTest project (`Stock_Ease.Tests`) was added to the solution in Visual Studio and references the main `Stock_Ease` project.
+    *   We created a separate test project (`Stock_Ease.Tests`) within the Visual Studio solution.
         `[SCREENSHOT HERE: Visual Studio Solution Explorer showing the main project and the test project]`
-    *   Tests were written using the Arrange-Act-Assert pattern within the Visual Studio editor, benefiting from IntelliSense and code navigation features.
+    *   We wrote tests covering the core CRUD actions of the `ProductsController`:
+        *   **Index:** Verified that the action returns a ViewResult containing a list of products.
+        *   **Details:** Tested scenarios where a product ID exists (returns ViewResult with product) and does not exist (returns NotFoundResult).
+        *   **Create (POST):** Tested valid model state (adds product, redirects to Index) and invalid model state (returns ViewResult with the model).
+        *   **Edit (GET):** Tested scenarios where a product ID exists (returns ViewResult with product) and does not exist (returns NotFoundResult).
+        *   **Edit (POST):** Tested valid model state (updates product, redirects to Index), invalid model state (returns ViewResult with model), ID mismatch (returns NotFoundResult), and concurrency exceptions.
+        *   **Delete (GET):** Tested scenarios where a product ID exists (returns ViewResult with product) and does not exist (returns NotFoundResult).
+        *   **DeleteConfirmed (POST):** Verified that the action removes the product and redirects to Index.
         `[SCREENSHOT HERE: Code snippet of a sample unit test method from ProductsControllerTests.cs]`
-    *   `[TestInitialize]` (`Setup`) method runs before each test to set up the in-memory DB, seed data, and create mocks.
-    *   `[TestCleanup]` (`Cleanup`) method runs after each test to dispose of the context and ensure test isolation.
-    *   Test methods cover various scenarios for each CRUD action (e.g., valid input, invalid input, item found, item not found).
-    *   Tests were written, discovered, and run directly within Visual Studio using the integrated **Test Explorer** window. This provided a fast feedback loop – write code, run tests, fix failures, repeat. Debugging failing tests was also streamlined using Visual Studio's debugging tools directly from the Test Explorer.
-        `[SCREENSHOT HERE: Visual Studio Test Explorer showing discovered tests and results (passing)]`
-    *   **Example Test Walkthrough (`EditPost_ReturnsRedirectToAction_WhenModelStateIsValid`):**
-        1.  **Arrange:** Gets a product from the seeded in-memory DB, modifies its `Name` and `Quantity`. Sets up the mock `_mockAlertsController` to expect a call to `CheckAndCreateLowStockAlert`.
-        2.  **Act:** Calls the `_controller.Edit(id, product)` method with the modified product.
-        3.  **Assert:**
-            *   Verifies the result is a `RedirectToActionResult` pointing to "Index".
-            *   Fetches the product again from the in-memory context to confirm its `Name` and `Quantity` were updated.
-            *   Verifies that the mocked `_alertsController.CheckAndCreateLowStockAlert` method was called exactly once with the correct product ID.
-*   **Test Coverage:** While not explicitly measured, the tests aim to cover the main execution paths and edge cases within the `ProductsController` actions. More tests could be added for other controllers and potentially service layers if they existed.
+    *   We used `[TestInitialize]` and `[TestCleanup]` for setting up/tearing down the in-memory database and mocks for each test.
+    *   We utilized Moq to mock the `AlertsController` dependency and verify interactions (`_mockAlertsController.Verify(...)`). *Challenge:* ⚠️ Correctly configuring Moq setups, especially for async methods or methods with specific arguments, required careful reading of documentation and some trial-and-error.
+*   **Execution:** We used Visual Studio's integrated **Test Explorer** for running and debugging tests, providing rapid feedback during development. All 18 tests passed successfully.
+    `[SCREENSHOT HERE: Visual Studio Test Explorer showing all 18 tests passing]`
+
+**5.3. Testing Gaps and Future Work:** ⚠️
+
+*   **Limited Coverage:** Our current unit tests primarily cover the `ProductsController` and its initial functionality. There is **no unit test coverage** for:
+    *   `TransactionsController`, `UsersController`, `AlertsController`, `ReportsController`, `SensorsController`, `WeightIntegrationController`.
+    *   The `WeightSensorStatusService` logic (restocking timer, state management).
+    *   SignalR hub interactions.
+*   **Integration Testing:** We did not implement integration tests. These would be valuable to test the interaction between components, including the database, controllers, services, and potentially the SignalR hub, using a real test database instance.
+*   **Frontend Testing:** We did not create automated tests for the JavaScript/UI behavior.
+
+> **Future Work:** Expanding our unit test coverage, particularly for the `WeightIntegrationController` and `WeightSensorStatusService`, and adding integration tests would significantly improve our confidence in the application's correctness and robustness.
 
 ---
 
-## 6. 🤔 Design Choices and Considerations
+## 6. 🤔 Design Choices, Challenges, and Considerations
 
-*   **Code First vs. Database First:** Code First was chosen for its developer-centric workflow and integration with the application codebase, suitable for new development.
-*   **EF Core:** Selected as the standard ORM for .NET applications, providing robust data access capabilities, LINQ integration, and migration management.
-*   **ASP.NET Core MVC:** A mature and well-supported framework for building web applications, offering features like routing, model binding, validation, and DI.
-*   **Monolithic Architecture (MVC):** Suitable for the scope of this project. For larger, more complex systems, alternative architectures like microservices or CQRS might be considered.
-*   **In-Memory Database for Testing:** Chosen for speed and isolation in unit tests. Trade-off: ⚠️ Doesn't perfectly replicate all SQL Server behaviors (e.g., complex T-SQL functions, specific constraint nuances). Integration tests against a real test database would be a valuable addition.
-*   **Mocking (Moq):** Standard library for creating mocks in .NET tests, essential for isolating units under test.
-*   **Transaction Logic:** The current implementation might need refinement to ensure atomic updates (e.g., updating `Product.Quantity` when a `Transaction` is saved should ideally happen within a single database transaction). This could involve moving logic into a service layer and using `DbContext.Database.BeginTransaction()`.
+*   **Code First:** We chose this for developer productivity and schema versioning benefits in a new project context. It required careful migration management.
+*   **EF Core:** Standard .NET ORM, simplifying data access but requiring us to understand its change tracking and query translation behaviors.
+*   **MVC Pattern:** Provided good structure and separation of concerns for this application size.
+*   **Dependency Injection:** We leveraged ASP.NET Core's built-in DI for decoupling and testability. Managing service lifetimes (Singleton for `WeightSensorStatusService`, Scoped for `DbContext`) was an important consideration.
+*   **Sensor Integration Approach:**
+    *   **API Endpoint:** We chose a simple HTTP POST endpoint for receiving external data due to its simplicity and wide compatibility. Alternatives like MQTT or WebSockets could be considered for more complex IoT scenarios.
+    *   **Service Layer:** Creating `WeightSensorStatusService` helped us separate stateful sensor logic from the stateless controller, improving organization.
+*   **Real-time Updates (SignalR):** We chose SignalR for its seamless integration with ASP.NET Core and efficient real-time web functionality, providing a better UX than constant polling. It required adding client-side libraries and JavaScript handling.
+*   **Alerting Logic:** The restocking timer and duplicate prevention logic added complexity but aimed to provide more meaningful alerts. We could potentially refine this logic further.
+*   **Testing Strategy:** We focused on unit tests for core logic and T-SQL for DB integrity. The lack of integration and service-layer tests is a recognized limitation. Using the In-Memory provider for unit tests is fast but doesn't perfectly mimic SQL Server behavior.
+*   **Error Handling:** We used basic `try-catch` blocks in controllers. More robust global error handling middleware could be implemented.
+*   **Atomicity:** The lack of explicit database transactions when updating product quantities based on manual transactions or sensor readings is a potential data consistency issue that we should address in future iterations.
 
 ---
 
 ## 7. 🏁 Conclusion
 
-> The Stock_Ease project successfully demonstrates the design, development, and testing of an integrated, data-driven web application using ASP.NET Core MVC, Entity Framework Core, and SQL Server. It fulfills the core requirements of the PROG1322 assignment by implementing full CRUD functionality for inventory management and incorporating both database-level (T-SQL) and application-level (Unit Tests with Mocks) automated testing strategies.
+> Our Stock_Ease project successfully evolved from a standard CRUD application into a more dynamic system incorporating simulated external data feeds and real-time updates. It demonstrates our design, development, and testing of an integrated, data-driven web application using ASP.NET Core MVC, Entity Framework Core, SQL Server, SignalR, and automated testing techniques. Our project fulfills the core requirements of the PROG1322 assignment while also exploring more advanced integration patterns.
 
-Key achievements include:
-*   ✅ A well-defined relational database schema managed via EF Core Code First migrations.
-*   ✅ A functional MVC application providing essential inventory management features.
-*   ✅ Implementation of automated tests ensuring data integrity and application logic correctness.
-*   ✅ Adherence to architectural best practices like separation of concerns (MVC) and dependency injection.
+Our key achievements include:
+*   ✅ A well-defined and evolved relational database schema managed via EF Core Code First migrations.
+*   ✅ A functional MVC application providing essential inventory management features (CRUD for Products, Transactions, Users, Alerts, Reports).
+*   ✅ Integration with an external (simulated) weight sensor data source via an API endpoint.
+*   ✅ Implementation of real-time UI updates for sensor data using SignalR.
+*   ✅ Enhanced alerting logic including weight thresholds, restocking timers, and duplicate prevention.
+*   ✅ Implementation of foundational automated tests (T-SQL for DB integrity, Unit Tests for core controller logic) ensuring baseline quality.
+*   ✅ Adherence to architectural best practices like separation of concerns (MVC, Services) and dependency injection.
 
-This project provides a solid foundation and effectively showcases the practical application of the concepts and technologies learned throughout the course. Potential future enhancements could include more advanced reporting, robust user authentication/authorization, a richer user interface, and explicit transaction management logic within a service layer.
+This project provides a solid foundation and effectively showcases our practical application of a wide range of concepts and technologies. Our journey involved overcoming challenges related to database migrations, validation, asynchronous programming, real-time communication setup, and testing methodologies. Potential future enhancements are numerous, including expanding our test coverage (especially integration tests), implementing robust authentication/authorization, refining the transaction atomicity, developing more sophisticated reporting, and improving the overall user interface.
 
 ---
 

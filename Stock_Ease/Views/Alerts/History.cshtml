@@ -1,0 +1,40 @@
+@model IEnumerable<Stock_Ease.Models.Alert>
+
+@{
+}
+
+<div class="container-fluid">
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card"> 
+        <div class="card-header">
+            Read Alert List
+        </div>
+        <div class="card-body">
+
+            <ul class="responsive-table">
+                <li class="table-header">
+                    <div class="col col-4">Message</div>
+                    <div class="col col-3">Product</div>
+                    <div class="col col-3">Date</div>
+                    <div class="col col-2">Actions</div>
+                </li>
+                @foreach (var item in Model)
+                {
+                    <li class="table-row">
+                        <div class="col col-4" data-label="Message">@item.Message</div>
+                        <div class="col col-3" data-label="Product">@item.Product?.Name</div>
+                        <div class="col col-3" data-label="Date">@item.AlertDate.ToString("g")</div>
+                        <div class="col col-2" data-label="Actions">
+                            <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-sm btn-info" title="Details"><i class="fas fa-info-circle"></i> Details</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div> 
+    </div> 
+</div>

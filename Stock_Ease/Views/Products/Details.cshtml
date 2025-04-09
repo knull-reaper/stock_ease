@@ -7,7 +7,11 @@
 }
 
 <div class="container-fluid">
-    <h1>@ViewData["Title"]</h1>
+    <div class="card mb-4"> 
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-header">
@@ -38,10 +42,31 @@
                 </dd>
 
                 <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.MinimumThreshold)
+                    Current Weight
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.CurrentWeight.ToString("F2")
+                </dd>
+
+                <dt class="col-sm-3">
+                    Threshold Type
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.ThresholdType)
+                </dd>
+
+                <dt class="col-sm-3">
+                    Minimum Threshold (@(Model.ThresholdType == "Weight" ? "Weight" : "Quantity"))
                 </dt>
                 <dd class="col-sm-9">
                     @Html.DisplayFor(model => model.MinimumThreshold)
+                </dd>
+                
+                <dt class="col-sm-3">
+                    Linked Sensor
+                </dt>
+                <dd class="col-sm-9">
+                    @(Model.SensorId ?? "N/A")
                 </dd>
 
                 <dt class="col-sm-3">

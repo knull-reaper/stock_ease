@@ -1,0 +1,58 @@
+@model List<Stock_Ease.Services.SensorStatus>
+
+@{
+    ViewData["Title"] = "Active Sensors";
+}
+
+<div class="container-fluid">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Active Sensor List
+        </div>
+        <div class="card-body">
+            <ul class="responsive-table">
+                <li class="table-header">
+                    <div class="col col-4">Sensor ID</div>
+                    <div class="col col-4">Last Seen</div>
+                    <div class="col col-4">Time Since Last Seen</div>
+                </li>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var sensor in Model)
+                    {
+                        <li class="table-row">
+                            <div class="col col-4" data-label="Sensor ID">@sensor.SensorId</div>
+                            <div class="col col-4" data-label="Last Seen">@sensor.LastHeartbeat.ToLocalTime().ToString("g")</div>
+                            <div class="col col-4" data-label="Time Since Last Seen">
+                                @{
+                                    var timeSince = DateTime.UtcNow - sensor.LastHeartbeat;
+                                    string timeAgo;
+                                    if (timeSince.TotalHours >= 1) {
+                                        timeAgo = $"{(int)timeSince.TotalHours}h {(int)timeSince.Minutes}m ago";
+                                    } else if (timeSince.TotalMinutes >= 1) {
+                                        timeAgo = $"{(int)timeSince.TotalMinutes}m {(int)timeSince.Seconds}s ago";
+                                    } else {
+                                        timeAgo = $"{(int)timeSince.TotalSeconds}s ago";
+                                    }
+                                }
+                                @timeAgo
+                            </div>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="table-row">
+                        <div class="col col-12" style="text-align: center;">No active sensors found.</div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

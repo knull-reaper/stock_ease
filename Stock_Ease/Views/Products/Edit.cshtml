@@ -45,10 +45,25 @@
                             <span asp-validation-for="MinimumThreshold" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
+                            <label asp-for="ThresholdType" class="form-label"></label>
+                            <select asp-for="ThresholdType" class="form-select">
+                                <option value="Quantity">Quantity</option>
+                                <option value="Weight">Weight</option>
+                            </select>
+                            <span asp-validation-for="ThresholdType" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
                             <label asp-for="ExpiryDate" class="form-label"></label>
                             
                             <input asp-for="ExpiryDate" type="date" class="form-control" asp-format="{0:yyyy-MM-dd}" />
                             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SensorId" class="form-label">Linked Sensor</label>
+                            <select asp-for="SensorId" class="form-select" asp-items="ViewBag.SensorIdList">
+                            </select>
+                            <span asp-validation-for="SensorId" class="text-danger"></span>
+                            <div class="form-text">Select an active sensor to link for automatic weight updates.</div>
                         </div>
                         <div class="mt-4">
                             <input type="submit" value="Save Changes" class="btn btn-primary" />

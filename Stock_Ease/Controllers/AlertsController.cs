@@ -18,24 +18,24 @@ namespace Stock_Ease.Controllers
         private readonly Stock_EaseContext _context = context;
 
 
+        // Index: Show only unread alerts.
         public async Task<IActionResult> Index()
         {
-            // Only show unread alerts on the main index page
             var stock_EaseContext = _context.Alerts
                                             .Include(a => a.Product)
-                                            .Where(a => !a.IsRead) // Filter for unread alerts
-                                            .OrderByDescending(a => a.AlertDate); // Show newest first
+                                            .Where(a => !a.IsRead)
+                                            .OrderByDescending(a => a.AlertDate);
             return View(await stock_EaseContext.ToListAsync());
         }
 
-        // Action to display read alerts (History)
+        // History: Show read alerts.
         public async Task<IActionResult> History()
         {
             var stock_EaseContext = _context.Alerts
                                             .Include(a => a.Product)
-                                            .Where(a => a.IsRead) // Filter for read alerts
-                                            .OrderByDescending(a => a.AlertDate); // Show newest first
-            ViewData["Title"] = "Alert History"; // Set title for the view
+                                            .Where(a => a.IsRead)
+                                            .OrderByDescending(a => a.AlertDate);
+            ViewData["Title"] = "Alert History";
             return View(await stock_EaseContext.ToListAsync());
         }
 

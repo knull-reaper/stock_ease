@@ -7,15 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Stock_Ease.Models;
 using Stock_Ease.Data;
+using Stock_Ease.Services;
 
 namespace Stock_Ease.Controllers
 {
 
-    public class ProductsController(Stock_EaseContext context, AlertsController alertsController) : Controller
+    public class ProductsController(
+        Stock_EaseContext context,
+        AlertsController alertsController,
+        IWeightSensorStatusService sensorStatusService
+        ) : Controller
     {
         private readonly Stock_EaseContext _context = context;
         private readonly AlertsController _alertsController = alertsController;
-        private const int LowStockThreshold = 10;
+        private readonly IWeightSensorStatusService _sensorStatusService = sensorStatusService;
+        private const int LowStockThreshold = 10; // Used for quantity-based threshold view logic
 
 
         public async Task<IActionResult> Index()
@@ -45,10 +51,22 @@ namespace Stock_Ease.Controllers
             return View(product);
         }
 
+        // Populates ViewBag.SensorIdList for dropdowns.
+        private void PopulateSensorDropdown(object? selectedSensor = null)
+        {
+            var activeSensors = _sensorStatusService.GetActiveSensors(TimeSpan.FromMinutes(15)); // Use a reasonable timeout
+
+            var sensorListItems = activeSensors
+                .Select(s => new SelectListItem { Value = s.SensorId, Text = s.SensorId })
+                .ToList();
+            sensorListItems.Insert(0, new SelectListItem { Value = "", Text = "-- Not Linked --" }); // Add option for no sensor
+
+            ViewBag.SensorIdList = new SelectList(sensorListItems, "Value", "Text", selectedSensor);
+        }
 
         public IActionResult Create()
         {
-
+            PopulateSensorDropdown();
             if (TempData["InitialBarcode"] != null)
             {
                 ViewData["InitialBarcode"] = TempData["InitialBarcode"];
@@ -61,7 +79,7 @@ namespace Stock_Ease.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Barcode,Quantity,MinimumThreshold,ExpiryDate")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Name,Barcode,Quantity,MinimumThreshold,ThresholdType,ExpiryDate,SensorId")] Product product)
         {
 
             if (string.IsNullOrWhiteSpace(product.Name))
@@ -96,7 +114,16 @@ namespace Stock_Ease.Controllers
                 }
             }
 
-
+            // Auto-set ThresholdType based on SensorId presence
+            if (!string.IsNullOrEmpty(product.SensorId))
+            {
+                product.ThresholdType = "Weight";
+            }
+            else
+            {
+                product.ThresholdType = "Quantity";
+            }
+            PopulateSensorDropdown(product.SensorId);
             return View(product);
         }
 
@@ -114,6 +141,7 @@ namespace Stock_Ease.Controllers
             {
                 return NotFound();
             }
+            PopulateSensorDropdown(product.SensorId);
             return View(product);
         }
 
@@ -122,7 +150,7 @@ namespace Stock_Ease.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Barcode,Quantity,MinimumThreshold,ExpiryDate")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Barcode,Quantity,MinimumThreshold,ThresholdType,ExpiryDate,SensorId")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -133,10 +161,23 @@ namespace Stock_Ease.Controllers
             {
                 try
                 {
+                    // Auto-set ThresholdType based on SensorId presence
+                    if (!string.IsNullOrEmpty(product.SensorId))
+                    {
+                        product.ThresholdType = "Weight";
+                    }
+                    else
+                    {
+                         product.ThresholdType = "Quantity";
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
 
-                    await _alertsController.CheckAndCreateLowStockAlert(product.ProductId);
+                    // TODO: Update alert logic to consider ThresholdType
+                    // await _alertsController.CheckAndCreateLowStockAlert(product.ProductId);
+                    Console.WriteLine($"TODO: Update alert logic for Product ID {product.ProductId} based on ThresholdType '{product.ThresholdType}'");
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,6 +192,7 @@ namespace Stock_Ease.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateSensorDropdown(product.SensorId);
             return View(product);
         }
 
