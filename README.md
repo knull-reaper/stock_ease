@@ -42,7 +42,7 @@ The application follows the Model-View-Controller (MVC) architectural pattern, p
 
 ## 💾 Database Schema
 
-<img src="er.svg" alt="Database ER Diagram">
+<img src="er.png" alt="Database ER Diagram">
 
 _(Note: The `SensorId` in `Product` conceptually links to an external sensor system.)_
 
