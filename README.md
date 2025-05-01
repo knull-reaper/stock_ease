@@ -100,3 +100,11 @@ _(Note: The `SensorId` in `Product` conceptually links to an external sensor sys
       python ocr_sender.py
       ```
     - This will start sending simulated weight data to the application's API endpoint, triggering real-time updates if configured.
+
+## 📸 Screenshots
+
+![Screenshot 1](screenshots/ss1.jpg)
+![Screenshot 2](screenshots/ss2.jpg)
+![Screenshot 3](screenshots/ss3.jpg)
+![Screenshot 4](screenshots/ss4.jpg)
+![Screenshot 5](screenshots/ss5.jpg)
