@@ -33,23 +33,25 @@ public class HomeController : Controller
         }
 
         var product = await _context.Products
-                                    .FirstOrDefaultAsync(p => p.Barcode == barcode);
+          .FirstOrDefaultAsync(p => p.Barcode == barcode);
 
         if (product != null)
         {
 
-            return RedirectToAction("Details", "Products", new { id = product.ProductId });
+            return RedirectToAction("Details", "Products", new
+            {
+                id = product.ProductId
+            });
         }
         else
         {
 
-            TempData["InfoMessage"] = $"Barcode '{barcode}' not found. Please register the product manually.";
+            TempData["InfoMessage"] = $ "Barcode '{barcode}' not found. Please register the product manually.";
 
             TempData["InitialBarcode"] = barcode;
             return RedirectToAction("Create", "Products");
         }
     }
-
 
     public IActionResult Privacy()
     {
@@ -59,6 +61,9 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+        });
     }
 }

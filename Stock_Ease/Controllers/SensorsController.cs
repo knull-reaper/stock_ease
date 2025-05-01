@@ -11,7 +11,7 @@ namespace Stock_Ease.Controllers
 
         public SensorsController(IWeightSensorStatusService sensorStatusService)
         {
-             _sensorStatusService = sensorStatusService;
+            _sensorStatusService = sensorStatusService;
         }
 
         public IActionResult Index()

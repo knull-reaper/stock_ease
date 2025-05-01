@@ -13,16 +13,16 @@ namespace Stock_Ease.Controllers
 {
 
     public class ProductsController(
-        Stock_EaseContext context,
-        AlertsController alertsController,
-        IWeightSensorStatusService sensorStatusService
-        ) : Controller
+      Stock_EaseContext context,
+      AlertsController alertsController,
+      IWeightSensorStatusService sensorStatusService
+    ) : Controller
     {
         private readonly Stock_EaseContext _context = context;
         private readonly AlertsController _alertsController = alertsController;
         private readonly IWeightSensorStatusService _sensorStatusService = sensorStatusService;
-        private const int LowStockThreshold = 10; // Used for quantity-based threshold view logic
-
+        private
+        const int LowStockThreshold = 10;
 
         public async Task<IActionResult> Index()
         {
@@ -30,7 +30,6 @@ namespace Stock_Ease.Controllers
             ViewData["LowStockThreshold"] = LowStockThreshold;
             return View(await _context.Products.ToListAsync());
         }
-
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -40,26 +39,32 @@ namespace Stock_Ease.Controllers
             }
 
             var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+              .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
 
-
             ViewData["LowStockThreshold"] = LowStockThreshold;
             return View(product);
         }
 
-        // Populates ViewBag.SensorIdList for dropdowns.
         private void PopulateSensorDropdown(object? selectedSensor = null)
         {
-            var activeSensors = _sensorStatusService.GetActiveSensors(TimeSpan.FromMinutes(15)); // Use a reasonable timeout
+            var activeSensors = _sensorStatusService.GetActiveSensors(TimeSpan.FromMinutes(15));
 
             var sensorListItems = activeSensors
-                .Select(s => new SelectListItem { Value = s.SensorId, Text = s.SensorId })
-                .ToList();
-            sensorListItems.Insert(0, new SelectListItem { Value = "", Text = "-- Not Linked --" }); // Add option for no sensor
+              .Select(s => new SelectListItem
+              {
+                  Value = s.SensorId,
+                  Text = s.SensorId
+              })
+              .ToList();
+            sensorListItems.Insert(0, new SelectListItem
+            {
+                Value = "",
+                Text = "-- Not Linked --"
+            });
 
             ViewBag.SensorIdList = new SelectList(sensorListItems, "Value", "Text", selectedSensor);
         }
@@ -73,9 +78,6 @@ namespace Stock_Ease.Controllers
             }
             return View();
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -94,16 +96,14 @@ namespace Stock_Ease.Controllers
                     _context.Add(product);
                     await _context.SaveChangesAsync();
 
-
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException dbEx)
                 {
 
-
                     ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists, " +
-                        "see your system administrator. Error: " + dbEx.Message);
+                      "Try again, and if the problem persists, " +
+                      "see your system administrator. Error: " + dbEx.Message);
 
                 }
                 catch (Exception ex)
@@ -114,7 +114,6 @@ namespace Stock_Ease.Controllers
                 }
             }
 
-            // Auto-set ThresholdType based on SensorId presence
             if (!string.IsNullOrEmpty(product.SensorId))
             {
                 product.ThresholdType = "Weight";
@@ -126,8 +125,6 @@ namespace Stock_Ease.Controllers
             PopulateSensorDropdown(product.SensorId);
             return View(product);
         }
-
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -145,9 +142,6 @@ namespace Stock_Ease.Controllers
             return View(product);
         }
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Barcode,Quantity,MinimumThreshold,ThresholdType,ExpiryDate,SensorId")] Product product)
@@ -161,21 +155,19 @@ namespace Stock_Ease.Controllers
             {
                 try
                 {
-                    // Auto-set ThresholdType based on SensorId presence
+
                     if (!string.IsNullOrEmpty(product.SensorId))
                     {
                         product.ThresholdType = "Weight";
                     }
                     else
                     {
-                         product.ThresholdType = "Quantity";
+                        product.ThresholdType = "Quantity";
                     }
 
                     _context.Update(product);
                     await _context.SaveChangesAsync();
 
-                    // TODO: Update alert logic to consider ThresholdType
-                    // await _alertsController.CheckAndCreateLowStockAlert(product.ProductId);
                     Console.WriteLine($"TODO: Update alert logic for Product ID {product.ProductId} based on ThresholdType '{product.ThresholdType}'");
 
                 }
@@ -196,7 +188,6 @@ namespace Stock_Ease.Controllers
             return View(product);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -205,7 +196,7 @@ namespace Stock_Ease.Controllers
             }
 
             var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+              .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -213,7 +204,6 @@ namespace Stock_Ease.Controllers
 
             return View(product);
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

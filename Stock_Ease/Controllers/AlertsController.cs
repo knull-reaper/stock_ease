@@ -17,28 +17,24 @@ namespace Stock_Ease.Controllers
     {
         private readonly Stock_EaseContext _context = context;
 
-
-        // Index: Show only unread alerts.
         public async Task<IActionResult> Index()
         {
             var stock_EaseContext = _context.Alerts
-                                            .Include(a => a.Product)
-                                            .Where(a => !a.IsRead)
-                                            .OrderByDescending(a => a.AlertDate);
+              .Include(a => a.Product)
+              .Where(a => !a.IsRead)
+              .OrderByDescending(a => a.AlertDate);
             return View(await stock_EaseContext.ToListAsync());
         }
 
-        // History: Show read alerts.
         public async Task<IActionResult> History()
         {
             var stock_EaseContext = _context.Alerts
-                                            .Include(a => a.Product)
-                                            .Where(a => a.IsRead)
-                                            .OrderByDescending(a => a.AlertDate);
+              .Include(a => a.Product)
+              .Where(a => a.IsRead)
+              .OrderByDescending(a => a.AlertDate);
             ViewData["Title"] = "Alert History";
             return View(await stock_EaseContext.ToListAsync());
         }
-
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,8 +44,8 @@ namespace Stock_Ease.Controllers
             }
 
             var alert = await _context.Alerts
-                .Include(a => a.Product)
-                .FirstOrDefaultAsync(m => m.AlertId == id);
+              .Include(a => a.Product)
+              .FirstOrDefaultAsync(m => m.AlertId == id);
             if (alert == null)
             {
                 return NotFound();
@@ -58,16 +54,12 @@ namespace Stock_Ease.Controllers
             return View(alert);
         }
 
-
         public IActionResult Create()
         {
 
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name");
             return View();
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -83,7 +75,6 @@ namespace Stock_Ease.Controllers
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", alert.ProductId);
             return View(alert);
         }
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -101,9 +92,6 @@ namespace Stock_Ease.Controllers
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name", alert.ProductId);
             return View(alert);
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -139,7 +127,6 @@ namespace Stock_Ease.Controllers
             return View(alert);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,8 +135,8 @@ namespace Stock_Ease.Controllers
             }
 
             var alert = await _context.Alerts
-                .Include(a => a.Product)
-                .FirstOrDefaultAsync(m => m.AlertId == id);
+              .Include(a => a.Product)
+              .FirstOrDefaultAsync(m => m.AlertId == id);
             if (alert == null)
             {
                 return NotFound();
@@ -157,7 +144,6 @@ namespace Stock_Ease.Controllers
 
             return View(alert);
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -178,12 +164,6 @@ namespace Stock_Ease.Controllers
             return _context.Alerts.Any(e => e.AlertId == id);
         }
 
-
-
-
-
-
-
         public virtual async Task CheckAndCreateLowStockAlert(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -192,14 +172,14 @@ namespace Stock_Ease.Controllers
             {
 
                 bool alertExists = await _context.Alerts
-                    .AnyAsync(a => a.ProductId == productId && !a.IsRead && a.Message.Contains("is low on stock"));
+                  .AnyAsync(a => a.ProductId == productId && !a.IsRead && a.Message.Contains("is low on stock"));
 
                 if (!alertExists)
                 {
                     var alert = new Alert
                     {
                         ProductId = productId,
-                        Message = $"Product '{product.Name}' is low on stock (Quantity: {product.Quantity}, Threshold: {product.MinimumThreshold}).",
+                        Message = $ "Product '{product.Name}' is low on stock (Quantity: {product.Quantity}, Threshold: {product.MinimumThreshold}).",
                         AlertDate = DateTime.UtcNow,
                         IsRead = false
                     };
@@ -210,21 +190,15 @@ namespace Stock_Ease.Controllers
             }
         }
 
-
-
-
-
-
-
         [HttpGet]
         [Route("api/alerts/unread")]
         public async Task<IActionResult> GetUnreadAlerts()
         {
             var unreadAlerts = await _context.Alerts
-                                             .Where(a => !a.IsRead)
-                                             .Include(a => a.Product)
-                                             .OrderByDescending(a => a.AlertDate)
-                                             .ToListAsync();
+              .Where(a => !a.IsRead)
+              .Include(a => a.Product)
+              .OrderByDescending(a => a.AlertDate)
+              .ToListAsync();
 
             if (unreadAlerts.Any())
             {
@@ -236,7 +210,6 @@ namespace Stock_Ease.Controllers
                 }
                 await _context.SaveChangesAsync();
             }
-
 
             return Json(unreadAlerts);
         }

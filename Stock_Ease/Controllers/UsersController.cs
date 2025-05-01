@@ -15,12 +15,10 @@ namespace Stock_Ease.Controllers
     {
         private readonly Stock_EaseContext _context = context;
 
-
         public async Task<IActionResult> Index()
         {
             return View(await _context.Users.ToListAsync());
         }
-
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -30,7 +28,7 @@ namespace Stock_Ease.Controllers
             }
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
+              .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
                 return NotFound();
@@ -39,14 +37,10 @@ namespace Stock_Ease.Controllers
             return View(user);
         }
 
-
         public IActionResult Create()
         {
             return View();
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,7 +54,6 @@ namespace Stock_Ease.Controllers
             }
             return View(user);
         }
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -76,9 +69,6 @@ namespace Stock_Ease.Controllers
             }
             return View(user);
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,7 +102,6 @@ namespace Stock_Ease.Controllers
             return View(user);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,7 +110,7 @@ namespace Stock_Ease.Controllers
             }
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
+              .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
                 return NotFound();
@@ -129,7 +118,6 @@ namespace Stock_Ease.Controllers
 
             return View(user);
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

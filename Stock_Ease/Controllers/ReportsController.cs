@@ -15,13 +15,11 @@ namespace Stock_Ease.Controllers
     {
         private readonly Stock_EaseContext _context = context;
 
-
         public async Task<IActionResult> Index()
         {
             var stock_EaseContext = _context.Reports.Include(r => r.User);
             return View(await stock_EaseContext.ToListAsync());
         }
-
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -31,8 +29,8 @@ namespace Stock_Ease.Controllers
             }
 
             var report = await _context.Reports
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.ReportId == id);
+              .Include(r => r.User)
+              .FirstOrDefaultAsync(m => m.ReportId == id);
             if (report == null)
             {
                 return NotFound();
@@ -41,16 +39,12 @@ namespace Stock_Ease.Controllers
             return View(report);
         }
 
-
         public IActionResult Create()
         {
 
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Name");
             return View();
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,7 +60,6 @@ namespace Stock_Ease.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Name", report.UserId);
             return View(report);
         }
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,9 +77,6 @@ namespace Stock_Ease.Controllers
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Name", report.UserId);
             return View(report);
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -122,7 +112,6 @@ namespace Stock_Ease.Controllers
             return View(report);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,8 +120,8 @@ namespace Stock_Ease.Controllers
             }
 
             var report = await _context.Reports
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.ReportId == id);
+              .Include(r => r.User)
+              .FirstOrDefaultAsync(m => m.ReportId == id);
             if (report == null)
             {
                 return NotFound();
@@ -140,7 +129,6 @@ namespace Stock_Ease.Controllers
 
             return View(report);
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

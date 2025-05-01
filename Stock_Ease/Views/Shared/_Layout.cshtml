@@ -1,5 +1,6 @@
-﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +9,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-          integrity="sha512-dNrYxx6n3FQijvyoeF7Yt76wHcBCLPYP0s2gKl/vzTVPvylDzL/wQmNocK58yT/4wSd9qJ44pLq4Zl5pPZ/7Nw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-dNrYxx6n3FQijvyoeF7Yt76wHcBCLPYP0s2gKl/vzTVPvylDzL/wQmNocK58yT/4wSd9qJ44pLq4Zl5pPZ/7Nw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
@@ -27,6 +28,7 @@
     var controllerName = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLowerInvariant() ?? "unknown";
     var bodyClass = $"controller-{controllerName}";
 }
+
 <body class="@bodyClass">
     <div id="toast-container" class="toast-container"></div>
 
@@ -45,7 +47,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             fetch('/api/alerts/unread')
                 .then(response => {
                     if (!response.ok) {
@@ -59,4 +61,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -7,6 +7,22 @@
       "RelativeMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|solutionrelative:stock_ease\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|c:\\users\\r34p3r\\source\\repos\\stock_ease\\stock_ease\\hubs\\transactionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|solutionrelative:stock_ease\\hubs\\transactionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55E15940-4C35-9899-5BA7-AA0B27D5DF6C}|Stock_Ease.Tests\\Stock_Ease.Tests.csproj|c:\\users\\r34p3r\\source\\repos\\stock_ease\\stock_ease.tests\\productscontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55E15940-4C35-9899-5BA7-AA0B27D5DF6C}|Stock_Ease.Tests\\Stock_Ease.Tests.csproj|solutionrelative:stock_ease.tests\\productscontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|c:\\users\\r34p3r\\source\\repos\\stock_ease\\stock_ease\\controllers\\weightintegrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|solutionrelative:stock_ease\\controllers\\weightintegrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|c:\\users\\r34p3r\\source\\repos\\stock_ease\\stock_ease\\models\\domainmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{647EB995-F0C6-40AA-96F4-3755A9EB68DF}|Stock_Ease\\Stock_Ease.csproj|solutionrelative:stock_ease\\models\\domainmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\obj\\Debug\\net8.0\\Stock_Ease.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Stock_Ease\\obj\\Debug\\net8.0\\Stock_Ease.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -22,8 +38,56 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProductsControllerTests.cs",
+              "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease.Tests\\ProductsControllerTests.cs",
+              "RelativeDocumentMoniker": "Stock_Ease.Tests\\ProductsControllerTests.cs",
+              "ToolTip": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease.Tests\\ProductsControllerTests.cs",
+              "RelativeToolTip": "Stock_Ease.Tests\\ProductsControllerTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T20:53:35.149Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TransactionHub.cs",
+              "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Hubs\\TransactionHub.cs",
+              "RelativeDocumentMoniker": "Stock_Ease\\Hubs\\TransactionHub.cs",
+              "ToolTip": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Hubs\\TransactionHub.cs",
+              "RelativeToolTip": "Stock_Ease\\Hubs\\TransactionHub.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T20:46:49.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WeightIntegrationController.cs",
+              "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Controllers\\WeightIntegrationController.cs",
+              "RelativeDocumentMoniker": "Stock_Ease\\Controllers\\WeightIntegrationController.cs",
+              "ToolTip": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Controllers\\WeightIntegrationController.cs",
+              "RelativeToolTip": "Stock_Ease\\Controllers\\WeightIntegrationController.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAYwHgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T20:38:16.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DomainModels.cs",
+              "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Models\\DomainModels.cs",
+              "RelativeDocumentMoniker": "Stock_Ease\\Models\\DomainModels.cs",
+              "ToolTip": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Models\\DomainModels.cs",
+              "RelativeToolTip": "Stock_Ease\\Models\\DomainModels.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAswBsAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T20:37:15.71Z"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -32,14 +96,14 @@
               "RelativeDocumentMoniker": "Stock_Ease\\Program.cs",
               "ToolTip": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\Program.cs",
               "RelativeToolTip": "Stock_Ease\\Program.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAADkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwA0AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-09T08:42:34.111Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": ".NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
               "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\obj\\Debug\\net8.0\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
               "RelativeDocumentMoniker": "Stock_Ease\\obj\\Debug\\net8.0\\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
@@ -50,7 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Stock_Ease.AssemblyInfo.cs",
               "DocumentMoniker": "C:\\Users\\r34p3r\\source\\repos\\Stock_Ease\\Stock_Ease\\obj\\Debug\\net8.0\\Stock_Ease.AssemblyInfo.cs",
               "RelativeDocumentMoniker": "Stock_Ease\\obj\\Debug\\net8.0\\Stock_Ease.AssemblyInfo.cs",
@@ -58,8 +122,7 @@
               "RelativeToolTip": "Stock_Ease\\obj\\Debug\\net8.0\\Stock_Ease.AssemblyInfo.cs",
               "ViewState": "AgIAAAEAAAAAAAAAAAAqwAwAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:11:33.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-09T08:11:33.214Z"
             }
           ]
         }

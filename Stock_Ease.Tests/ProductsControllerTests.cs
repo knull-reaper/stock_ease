@@ -5,12 +5,12 @@ using Stock_Ease.Data;
 using Stock_Ease.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory; // Add this using directive
+using Microsoft.EntityFrameworkCore.InMemory;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Stock_Ease.Services; // Add this using
+using Stock_Ease.Services;
 
 namespace Stock_Ease.Tests
 {
@@ -26,21 +26,18 @@ namespace Stock_Ease.Tests
         [TestInitialize]
         public void Setup()
         {
-            // Use unique database name for each test run to ensure isolation
             _options = new DbContextOptionsBuilder<Stock_EaseContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _context = new Stock_EaseContext(_options);
 
-            // Seed initial data for tests
             _context.Products.AddRange(
                 new Product { ProductId = 1, Name = "Test Product 1", Quantity = 10, MinimumThreshold = 5 },
                 new Product { ProductId = 2, Name = "Test Product 2", Quantity = 20, MinimumThreshold = 10 }
             );
             _context.SaveChanges();
 
-            // Set up a separate in-memory database for the alerts controller
             var mockAlertsContextOptions = new DbContextOptionsBuilder<Stock_EaseContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString() + "_alerts")
                 .Options;
@@ -50,12 +47,10 @@ namespace Stock_Ease.Tests
             _mockAlertsController.Setup(ac => ac.CheckAndCreateLowStockAlert(It.IsAny<int>()))
                 .Returns(Task.CompletedTask);
 
-            // Mock the sensor status service
             _mockSensorStatusService = new Mock<IWeightSensorStatusService>();
             _mockSensorStatusService.Setup(s => s.GetActiveSensors(It.IsAny<TimeSpan>()))
                                     .Returns(new List<SensorStatus>());
 
-            // Instantiate the controller with the required mocked services
             _controller = new ProductsController(_context, _mockAlertsController.Object, _mockSensorStatusService.Object);
         }
 
