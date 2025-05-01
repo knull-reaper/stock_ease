@@ -42,55 +42,7 @@ The application follows the Model-View-Controller (MVC) architectural pattern, p
 
 ## 💾 Database Schema
 
-```mermaid
-erDiagram
-    USER ||--o{ TRANSACTION : performs
-    USER ||--o{ REPORT : generates
-    PRODUCT ||--o{ TRANSACTION : involved_in
-    PRODUCT ||--o{ ALERT : triggers
-    TRANSACTION }|--|| USER : performed_by
-    TRANSACTION }|--|| PRODUCT : involves
-    REPORT }|--|| USER : generated_by
-    ALERT }|--|| PRODUCT : triggered_by
-
-    USER {
-        int UserId PK
-        string Name
-        string Role
-        string Email
-    }
-    PRODUCT {
-        int ProductId PK
-        string Name
-        string Barcode NULL
-        int Quantity
-        int MinimumThreshold
-        datetime ExpiryDate NULL
-        decimal CurrentWeight NULL "Nullable"
-        string SensorId NULL "Nullable, FK (Conceptually)"
-        string ThresholdType "Default 'Quantity'"
-    }
-    TRANSACTION {
-        int TransactionId PK
-        int UserId FK
-        int ProductId FK
-        int Quantity
-        datetime TransactionDate
-    }
-    REPORT {
-        int ReportId PK
-        int UserId FK
-        string ReportType
-        datetime GeneratedDate
-    }
-    ALERT {
-        int AlertId PK
-        int ProductId FK
-        string Message
-        datetime AlertDate
-        bool IsRead
-    }
-```
+<img src="er.svg" alt="Database ER Diagram">
 
 _(Note: The `SensorId` in `Product` conceptually links to an external sensor system.)_
 
