@@ -57,7 +57,7 @@ _(Note: The `SensorId` in `Product` conceptually links to an external sensor sys
 2.  **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/knull-reaper/stock-ease
+    git clone https://github.com/knull-reaper/stock_ease
     cd Stock_Ease
     ```
 
